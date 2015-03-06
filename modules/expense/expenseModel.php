@@ -1,6 +1,6 @@
 <?php
 
-	class expenseModel implements ModuleModel
+	class ExpenseModel extends ModuleModel
 	{
 		public static function getOne($param)
 		{

@@ -1,6 +1,6 @@
 <?php
 
-	class ErrorModel implements ModuleModel
+	class ErrorModel extends ModuleModel
 	{
 		public static function getOne($param)
 		{

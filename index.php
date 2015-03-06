@@ -11,17 +11,17 @@ $_LOG->pushHandler(new \Monolog\Handler\StreamHandler(Core::getRoot().'logs/'.da
 // $log->addError('Bar');
 
 // Library Handle Errors
-// $whoops = new \Whoops\Run;
-// $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
-// $whoops->pushHandler(function ($exception, $inspector, $run) {
-// 	if(Config::get("global", "dev_mode") == "0") {
-// 		GLOBAL $_LOG;
-// 		$_LOG->addError($exception->getMessage());
-//     	Email::send(Config::get("mails", "alertes_dev"),'Error exception non encapsulé !','Exception : '.$exception->getMessage().'<br>Code : '.$exception->getCode().'<br>File : '.$exception->getFile().'<br>Line : '.$exception->getLine().'<br>Previous : '.$exception->getPrevious().'<br><br>$_REQUEST : <pre>'.print_r($_SERVER,true).'</pre>');
-//     	Core::redirect('error/500');
-// 	}
-// });
-// $whoops->register();
+$whoops = new \Whoops\Run;
+$whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
+$whoops->pushHandler(function ($exception, $inspector, $run) {
+	if(Config::get("global", "dev_mode") == "0") {
+		GLOBAL $_LOG;
+		$_LOG->addError($exception->getMessage());
+    	Email::send(Config::get("mails", "alertes_dev"),'Error exception non encapsulé !','Exception : '.$exception->getMessage().'<br>Code : '.$exception->getCode().'<br>File : '.$exception->getFile().'<br>Line : '.$exception->getLine().'<br>Previous : '.$exception->getPrevious().'<br><br>$_REQUEST : <pre>'.print_r($_SERVER,true).'</pre>');
+    	Core::redirect('error/500');
+	}
+});
+$whoops->register();
 
 // BDD
 $_DATABASE = new Database();
@@ -34,10 +34,13 @@ Flight::route('(/@module(/@function(/@param)))', function($module, $function, $p
 	// Module par défault
 	$module = (empty($module)) ? "dashboard" : $module;
 	// Fonction par défault
-	$function = (empty($function)) ? "view" : (is_numeric($function) ? "_".$function : $function);
+	$function = (empty($function)) ? "view" : $function;
+
+    //Préfixe _ & Suffixe Action
+    $functionAction = (is_numeric($function) ? "_".$function : $function)."Action";
 
 	// Définition des noms des fichiers MVC
-	$moduleController = ucfirst($module)."Controller";
+	$moduleController = ucfirst($module)."ViewController";
 	$moduleModel = ucfirst($module)."Model";
 
 	
@@ -54,18 +57,19 @@ Flight::route('(/@module(/@function(/@param)))', function($module, $function, $p
 		throw new Exception('Le '.$moduleModel.'.php du module '.$module.' non trouvée !', 1);
 
 	// Test existance controller
-	if(file_exists('modules/'.$module.'/'.$moduleController.'.php'))
-		require_once('modules/'.$module.'/'.$moduleController.'.php');
+	if(file_exists('modules/'.$module.'/controller/'.$moduleController.'.php'))
+		require_once('modules/'.$module.'/controller/'.$moduleController.'.php');
 	else
 		throw new Exception('Le '.$moduleController.'.php du module '.$module.' non trouvée !', 1);
+
 
 	// Test existance class controller
 	if(!class_exists($moduleController))
 		throw new Exception('Class '.$moduleController.' n\'existe pas !', 1);
-	else if(!method_exists($moduleController, $function))
-		throw new Exception('Function '.$moduleController.'::'.$function.' n\'existe pas !', 1);
+	else if(!method_exists($moduleController, $functionAction))
+		throw new Exception('Function '.$moduleController.'::'.$functionAction.' n\'existe pas !', 1);
 	else
-		$data = $moduleController::$function($param);
+		$data = $moduleController::$functionAction($param);
 	
 	// Paramètre fullpage du view module
 	if($config['param']['fullpage'] == "0")
@@ -156,5 +160,5 @@ Flight::route('(/@module(/@function(/@param)))', function($module, $function, $p
 
 // });
 
-// Flight::set('flight.handle_errors', false);
+Flight::set('flight.handle_errors', false);
 Flight::start();
