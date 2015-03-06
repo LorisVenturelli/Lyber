@@ -1,0 +1,4 @@
+logs/*
+.idea/
+config/*.ini
+vendor
