@@ -1,6 +1,6 @@
 <?php
 
-	class dashboardModel implements ModuleModel
+	class dashboardModel extends ModuleModel
 	{
 		public static function getOne($param)
 		{

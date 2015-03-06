@@ -1,6 +1,6 @@
 {
-    "name": "Loris/qgmanager",
-    "description": "QG Manager",
+    "name": "LorisVenturelli/Lyber",
+    "description": "Lyber Framwork",
     "authors": [
         {
             "name": "Loris Venturelli",
@@ -17,8 +17,9 @@
     },
     "autoload": {
         "classmap": [ 
-            "class/",
-            "interfaces/" 
+            "app/components/",
+            "app/controllers/",
+            "app/models/"
         ]
     }
 }

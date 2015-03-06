@@ -1,6 +1,6 @@
 <?php
 
-	class __modeleModel implements ModuleModel
+	class __modeleModel extends ModuleModel
 	{
 		public static function getOne($param)
 		{
