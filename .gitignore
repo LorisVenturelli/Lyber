@@ -2,3 +2,4 @@ config/*.ini
 logs
 vendor
 .idea
+webarch
