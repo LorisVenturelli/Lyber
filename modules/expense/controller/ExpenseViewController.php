@@ -5,7 +5,9 @@
 
 		public static function viewAction($param)
 		{
-			return json_encode(ExpenseModel::getAll());
+            $expense = new Expense();
+
+			return json_encode($expense->all());
 		}
 
 		public static function addAction()

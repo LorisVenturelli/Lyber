@@ -13,7 +13,7 @@ class Crud {
 	public $variables;
 
 	public function __construct($data = array()) {
-		$this->db =  new DB();	
+		$this->db =  new Database();
 		$this->variables  = $data;
 	}
 

@@ -62,6 +62,9 @@ Flight::route('(/@module(/@function(/@param)))', function($module, $function, $p
 	else
 		throw new Exception('Le '.$moduleController.'.php du module '.$module.' non trouvée !', 1);
 
+    // Test existance entity
+    if(file_exists('modules/'.$module.'/'.ucfirst($module).'Entity.php'))
+        require_once('modules/'.$module.'/'.ucfirst($module).'Entity.php');
 
 	// Test existance class controller
 	if(!class_exists($moduleController))
