@@ -3,12 +3,12 @@
 	class ExpenseViewController extends ModuleViewController
 	{
 
-		public static function view($param)
+		public static function viewAction($param)
 		{
 			return json_encode(ExpenseModel::getAll());
 		}
 
-		public static function add()
+		public static function addAction()
 		{
 			try {
 
@@ -32,7 +32,7 @@
 			}
 		}
 
-		public static function edit($id)
+		public static function editAction($id)
 		{
 			try {
 
@@ -55,7 +55,7 @@
 			}
 		}
 
-		public static function delete($id)
+		public static function deleteAction($id)
 		{
 			try {
 
