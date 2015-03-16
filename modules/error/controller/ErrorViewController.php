@@ -3,7 +3,7 @@
 	class ErrorViewController extends ModuleViewController
 	{
 
-		public static function viewAction($param)
+		public static function showAction($param)
 		{
 			Core::redirect('error/404');
 

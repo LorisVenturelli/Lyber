@@ -1,20 +1,18 @@
 <?php
 
-	class loginController implements ModuleController
+	class LoginViewController extends ModuleViewController
 	{
 
-		public static function view($param)
+		public static function showAction($param)
 		{
 			return array();
 		}
 
-		public static function APIConnectApp()
+		public static function APIConnectAppAction()
 		{
 			GLOBAL $_DATABASE;
 
 			$data = Core::getParams('post');
-
-			error_log(print_r($data,true));
 
 			try {
 				
@@ -23,7 +21,7 @@
 					$data['password'] => ['notempty','string']
 				]);
 
-				$user = loginModel::getOneByEmail($data['login']);
+				$user = LoginModel::getOneByEmail($data['login']);
 
 				error_log(print_r($user,true));
 
