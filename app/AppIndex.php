@@ -52,6 +52,12 @@
         else
             throw new Exception('Fichier de config '.$function.'.ini du module '.$module.' non trouvée !', 1);
 
+        $mod_config = parse_ini_file('modules/__modele/config/show.ini', true);
+
+        // TODO - Faire un controller pour cet héritage de config
+        // Héritage des configs modules
+        $config = array_replace_recursive($mod_config, $config);
+
         // Test existance model
         if(file_exists('modules/'.$module.'/'.$moduleModel.'.php'))
             require_once('modules/'.$module.'/'.$moduleModel.'.php');
@@ -77,6 +83,48 @@
         // Paramètre fullpage du view module
         if($config['param']['fullpage'] == "0")
         {
+            // TODO - Gestionnaire de cache et minifer
+            // Assets CSS
+            if(!empty($config['assets']['css'])){
+                foreach($config['assets']['css'] as $asset)
+                    Assets::addCssFile($asset);
+            }
+
+            foreach($config['assets']['mainCSS'] as $asset)
+                Assets::addCssFile($asset);
+
+            // Assets JS
+            foreach($config['assets']['mainJS'] as $asset)
+                Assets::addJsFile($asset);
+
+            if(!empty($config['assets']['js'])){
+                foreach($config['assets']['js'] as $asset)
+                    Assets::addJsFile($asset);
+            }
+
+            if(Config::get('global','assets_minifer') == 1) {
+
+                if(!file_exists(Core::getRoot().'modules/'.$module.'/cache/js'))
+                    if(!mkdir(Core::getRoot().'modules/'.$module.'/cache/js', 0777, true))
+                        throw new Exception('Echec lors de la création du dossier cache JS !');
+
+                if(!file_exists(Core::getRoot().'modules/'.$module.'/cache/js/'.$function.'.min.js'))
+                    if(!fopen(Core::getRoot().'modules/'.$module.'/cache/js/'.$function.'.min.js','w'))
+                        throw new Exception('Echec lors de la création du fichier cache JS !');
+
+                if(!file_exists(Core::getRoot().'modules/'.$module.'/cache/css'))
+                    if(!mkdir(Core::getRoot().'modules/'.$module.'/cache/css', 0777, true))
+                        throw new Exception('Echec lors de la création du dossier cache CSS !');
+
+                if(!file_exists(Core::getRoot().'modules/'.$module.'/cache/js/'.$function.'.min.css'))
+                    if(!fopen(Core::getRoot().'modules/'.$module.'/cache/js/'.$function.'.min.css','w'))
+                        throw new Exception('Echec lors de la création du fichier cache CSS !');
+
+                Assets::saveCss(Core::getRoot().'modules/'.$module.'/cache/css/'.$function.'.min.css');
+                Assets::saveJs(Core::getRoot().'modules/'.$module.'/cache/js/'.$function.'.min.js');
+            }
+
+
             // TODO - Templatisé le bordel
 
             // Inclusion du header

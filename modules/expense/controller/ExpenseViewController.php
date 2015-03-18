@@ -3,7 +3,7 @@
 	class ExpenseViewController extends ModuleViewController
 	{
 
-		public static function viewAction($param)
+		public static function showAction($param)
 		{
             $expense = new Expense();
 
@@ -21,10 +21,15 @@
 					$data['price'] => ['notempty','numeric']
 				]);
 
-				$new_id = ExpenseModel::add($data['title'], $data['price']);
+                $expense = new Expense();
+                $expense->title = $data['title'];
+                $expense->price = $data['price'];
+                $saved = $expense->Create();
 
-				if(is_numeric($new_id))
-					return Core::json(array("new_id"=>$new_id), true, "Expense ajouté avec succès.");
+                error_log($saved);
+
+				if($saved)
+					return Core::json(array("new_id"=>$expense->Id), true, "Expense ajouté avec succès.");
 				else
 					throw new Exception("Erreur d'enregistrement lors de la requete add:expense !", 1);
 

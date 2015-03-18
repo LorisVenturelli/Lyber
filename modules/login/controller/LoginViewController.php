@@ -8,7 +8,8 @@
 			return array();
 		}
 
-		public static function APIConnectAppAction()
+
+        public static function APIConnectAppAction()
 		{
 			GLOBAL $_DATABASE;
 
