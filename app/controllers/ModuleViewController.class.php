@@ -3,7 +3,7 @@
     class ModuleViewController
     {
 
-        public static function viewAction($param)
+        public static function showAction($param)
         {
             return array();
         }

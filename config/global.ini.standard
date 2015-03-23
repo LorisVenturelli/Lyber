@@ -1,5 +1,6 @@
 [global]
 dev_mode = 1
+home_module =
 
 [bdd]
 host =

@@ -13,7 +13,8 @@
         "mikecao/flight": "dev-master",
         "filp/whoops": "1.2.*@dev",
         "monolog/monolog": "1.12.*@dev",
-        "kriswallsmith/assetic": "1.3.*@dev"
+        "simple-crud/simple-crud": "dev-master",
+        "matthiasmullie/minify": "~1.3"
     },
     "autoload": {
         "classmap": [ 

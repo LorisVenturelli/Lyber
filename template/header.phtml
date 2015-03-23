@@ -8,28 +8,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <meta content="" name="description" />
   <meta content="" name="author" />
-      
-  <link href="<?= Core::absURL() ?>assets/plugins/jquery-metrojs/MetroJs.min.css" rel="stylesheet" type="text/css" />
-  <link rel="stylesheet" type="text/css" href="<?= Core::absURL() ?>assets/plugins/shape-hover/css/demo.css" />
-  <link rel="stylesheet" type="text/css" href="<?= Core::absURL() ?>assets/plugins/shape-hover/css/component.css" />
-  <link rel="stylesheet" type="text/css" href="<?= Core::absURL() ?>assets/plugins/owl-carousel/owl.carousel.css" />
-  <link rel="stylesheet" type="text/css" href="<?= Core::absURL() ?>assets/plugins/owl-carousel/owl.theme.css" />
-  <link href="<?= Core::absURL() ?>assets/plugins/pace/pace-theme-flash.css" rel="stylesheet" type="text/css" media="screen"/>
-  <link href="<?= Core::absURL() ?>assets/plugins/jquery-slider/css/jquery.sidr.light.css" rel="stylesheet" type="text/css" media="screen"/>
-  <link rel="stylesheet" href="<?= Core::absURL() ?>assets/plugins/jquery-ricksaw-chart/css/rickshaw.css" type="text/css" media="screen" >
-  <link rel="stylesheet" href="<?= Core::absURL() ?>assets/plugins/Mapplic/mapplic/mapplic.css" type="text/css" media="screen" >
-  <!-- BEGIN CORE CSS FRAMEWORK -->
-  <link href="<?= Core::absURL() ?>assets/plugins/boostrapv3/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-  <link href="<?= Core::absURL() ?>assets/plugins/boostrapv3/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css"/>
-  <link href="<?= Core::absURL() ?>assets/plugins/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css"/>
-  <link href="<?= Core::absURL() ?>assets/css/animate.min.css" rel="stylesheet" type="text/css"/>
-  <link href="<?= Core::absURL() ?>assets/plugins/jquery-scrollbar/jquery.scrollbar.css" rel="stylesheet" type="text/css"/>
-  <!-- END CORE CSS FRAMEWORK -->
 
-  <!-- BEGIN CSS TEMPLATE -->
-  <link href="<?= Core::absURL() ?>assets/css/style.css" rel="stylesheet" type="text/css"/>
-  <link href="<?= Core::absURL() ?>assets/css/responsive.css" rel="stylesheet" type="text/css"/>
-  <link href="<?= Core::absURL() ?>assets/css/custom-icon-set.css" rel="stylesheet" type="text/css"/>
+  <?php
+
+        if(Config::get('global','assets_cache') == 1) {
+            echo '<link href="'.Core::absURL().'modules/'.$module.'/cache/css/'.$function.'.min.css"" rel="stylesheet" type="text/css" />';
+        }
+        else {
+            foreach(Assets::getCssList() as $asset) {
+                echo '<link href="'.Core::absURL().$asset.'" rel="stylesheet" type="text/css" />';
+            }
+        }
+
+  ?>
+
   <link href="<?= Core::absURL() ?>assets/css/magic_space.css" rel="stylesheet" type="text/css"/>
   <!-- END CSS TEMPLATE -->
 

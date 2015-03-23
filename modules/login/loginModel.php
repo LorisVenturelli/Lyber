@@ -1,6 +1,6 @@
 <?php
 
-	class loginModel implements ModuleModel
+	class LoginModel extends ModuleModel
 	{
 		public static function getOne($param)
 		{
