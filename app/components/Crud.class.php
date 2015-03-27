@@ -63,7 +63,7 @@ class Crud {
 		}
 	}
 
-	public function create() { 
+	public function create() {
 		$bindings   	= $this->variables;
 
 		if(!empty($bindings)) {
@@ -91,7 +91,7 @@ class Crud {
 		$id = (empty($this->variables[$this->pk])) ? $id : $this->variables[$this->pk];
 
 		if(!empty($id)) {
-			$sql = "SELECT * FROM " . $this->table ." WHERE " . $this->pk . "= :" . $this->pk . " LIMIT 1";	
+			$sql = "SELECT * FROM " . $this->table ." WHERE " . $this->pk . "= :" . $this->pk . " LIMIT 1";
 			$this->variables = $this->db->row($sql,array($this->pk=>$id));
 		}
 	}
@@ -99,7 +99,7 @@ class Crud {
 	public function all(){
 		return $this->db->query("SELECT * FROM " . $this->table);
 	}
-	
+
 	public function min($field)  {
 		if($field)
 		return $this->db->single("SELECT min(" . $field . ")" . " FROM " . $this->table);
