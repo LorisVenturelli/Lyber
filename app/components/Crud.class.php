@@ -8,12 +8,9 @@
 
 class Crud {
 
-	private $db;
-
 	public $variables;
 
 	public function __construct($data = array()) {
-		$this->db =  new Database();
 		$this->variables  = $data;
 	}
 
@@ -59,11 +56,11 @@ class Crud {
 
 		if(count($columns) > 1 ) {
 			$sql = "UPDATE " . $this->table .  " SET " . $fieldsvals . " WHERE " . $this->pk . "= :" . $this->pk;
-			return $this->db->query($sql,$this->variables);
+			return Database::query($sql,$this->variables);
 		}
 	}
 
-	public function create() { 
+	public function create() {
 		$bindings   	= $this->variables;
 
 		if(!empty($bindings)) {
@@ -75,7 +72,7 @@ class Crud {
 			$sql 		= "INSERT INTO ".$this->table." () VALUES ()";
 		}
 
-		return $this->db->query($sql,$bindings);
+		return Database::query($sql,$bindings);
 	}
 
 	public function delete($id = "") {
@@ -83,7 +80,7 @@ class Crud {
 
 		if(!empty($id)) {
 			$sql = "DELETE FROM " . $this->table . " WHERE " . $this->pk . "= :" . $this->pk. " LIMIT 1" ;
-			return $this->db->query($sql,array($this->pk=>$id));
+			return Database::query($sql,array($this->pk=>$id));
 		}
 	}
 
@@ -91,38 +88,38 @@ class Crud {
 		$id = (empty($this->variables[$this->pk])) ? $id : $this->variables[$this->pk];
 
 		if(!empty($id)) {
-			$sql = "SELECT * FROM " . $this->table ." WHERE " . $this->pk . "= :" . $this->pk . " LIMIT 1";	
-			$this->variables = $this->db->row($sql,array($this->pk=>$id));
+			$sql = "SELECT * FROM " . $this->table ." WHERE " . $this->pk . "= :" . $this->pk . " LIMIT 1";
+			$this->variables = Database::row($sql,array($this->pk=>$id));
 		}
 	}
 
 	public function all(){
-		return $this->db->query("SELECT * FROM " . $this->table);
+		return Database::query("SELECT * FROM " . $this->table);
 	}
-	
+
 	public function min($field)  {
 		if($field)
-		return $this->db->single("SELECT min(" . $field . ")" . " FROM " . $this->table);
+		return Database::single("SELECT min(" . $field . ")" . " FROM " . $this->table);
 	}
 
 	public function max($field)  {
 		if($field)
-		return $this->db->single("SELECT max(" . $field . ")" . " FROM " . $this->table);
+		return Database::single("SELECT max(" . $field . ")" . " FROM " . $this->table);
 	}
 
 	public function avg($field)  {
 		if($field)
-		return $this->db->single("SELECT avg(" . $field . ")" . " FROM " . $this->table);
+		return Database::single("SELECT avg(" . $field . ")" . " FROM " . $this->table);
 	}
 
 	public function sum($field)  {
 		if($field)
-		return $this->db->single("SELECT sum(" . $field . ")" . " FROM " . $this->table);
+		return Database::single("SELECT sum(" . $field . ")" . " FROM " . $this->table);
 	}
 
 	public function count($field)  {
 		if($field)
-		return $this->db->single("SELECT count(" . $field . ")" . " FROM " . $this->table);
+		return Database::single("SELECT count(" . $field . ")" . " FROM " . $this->table);
 	}	
 	
 }

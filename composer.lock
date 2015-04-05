@@ -4,20 +4,124 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e2e500ffc69e53e93582973700d11e2e",
+    "hash": "705412bd408a2e3fd11491e69570ebba",
     "packages": [
+        {
+            "name": "doctrine/lexer",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/lexer.git",
+                "reference": "83893c552fd2045dd78aef794c31e694c37c0b8c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/lexer/zipball/83893c552fd2045dd78aef794c31e694c37c0b8c",
+                "reference": "83893c552fd2045dd78aef794c31e694c37c0b8c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Doctrine\\Common\\Lexer\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Roman Borschel",
+                    "email": "roman@code-factory.org"
+                },
+                {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com"
+                },
+                {
+                    "name": "Johannes Schmitt",
+                    "email": "schmittjoh@gmail.com"
+                }
+            ],
+            "description": "Base library for a lexer that can be used in Top-Down, Recursive Descent Parsers.",
+            "homepage": "http://www.doctrine-project.org",
+            "keywords": [
+                "lexer",
+                "parser"
+            ],
+            "time": "2014-09-09 13:34:57"
+        },
+        {
+            "name": "egulias/email-validator",
+            "version": "1.2.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/egulias/EmailValidator.git",
+                "reference": "af9417f765623429c9d2a200f0159537e08d1ef3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/af9417f765623429c9d2a200f0159537e08d1ef3",
+                "reference": "af9417f765623429c9d2a200f0159537e08d1ef3",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/lexer": "~1.0",
+                "php": ">= 5.3.3"
+            },
+            "require-dev": {
+                "satooshi/php-coveralls": "dev-master"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Egulias\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Eduardo Gulias Davis"
+                }
+            ],
+            "description": "A library for validating emails",
+            "homepage": "https://github.com/egulias/EmailValidator",
+            "keywords": [
+                "email",
+                "validation",
+                "validator"
+            ],
+            "time": "2015-01-04 22:42:32"
+        },
         {
             "name": "filp/whoops",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filp/whoops.git",
-                "reference": "dcce91553e2e056857f1ea844949e9a8a71b613d"
+                "reference": "e836694368c7e66391bba5da9ea14900275aa132"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filp/whoops/zipball/dcce91553e2e056857f1ea844949e9a8a71b613d",
-                "reference": "dcce91553e2e056857f1ea844949e9a8a71b613d",
+                "url": "https://api.github.com/repos/filp/whoops/zipball/e836694368c7e66391bba5da9ea14900275aa132",
+                "reference": "e836694368c7e66391bba5da9ea14900275aa132",
                 "shasum": ""
             },
             "require": {
@@ -62,7 +166,7 @@
                 "whoops",
                 "zf2"
             ],
-            "time": "2015-02-17 15:50:31"
+            "time": "2015-03-15 11:28:26"
         },
         {
             "name": "matthiasmullie/minify",
@@ -176,12 +280,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikecao/flight.git",
-                "reference": "0c8b665304a514d17bf72d0d2f6b11fa24c547cb"
+                "reference": "9b0b527ac5f1b75ad79d151a4510b8ea958769bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikecao/flight/zipball/0c8b665304a514d17bf72d0d2f6b11fa24c547cb",
-                "reference": "0c8b665304a514d17bf72d0d2f6b11fa24c547cb",
+                "url": "https://api.github.com/repos/mikecao/flight/zipball/9b0b527ac5f1b75ad79d151a4510b8ea958769bf",
+                "reference": "9b0b527ac5f1b75ad79d151a4510b8ea958769bf",
                 "shasum": ""
             },
             "require": {
@@ -208,7 +312,7 @@
             ],
             "description": "Flight is a fast, simple, extensible framework for PHP. Flight enables you to quickly and easily build RESTful web applications.",
             "homepage": "http://flightphp.com",
-            "time": "2015-01-13 07:33:36"
+            "time": "2015-03-24 04:14:58"
         },
         {
             "name": "monolog/monolog",
@@ -366,20 +470,21 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v5.3.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "c5f963e7f9d6f6438fda4f22d5cc2db296ec621a"
+                "reference": "db95cfa68a8bc91d1c54f75c416f481c9a8bd100"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/c5f963e7f9d6f6438fda4f22d5cc2db296ec621a",
-                "reference": "c5f963e7f9d6f6438fda4f22d5cc2db296ec621a",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/db95cfa68a8bc91d1c54f75c416f481c9a8bd100",
+                "reference": "db95cfa68a8bc91d1c54f75c416f481c9a8bd100",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "egulias/email-validator": "~1.2",
+                "php": ">=5.5.0"
             },
             "require-dev": {
                 "mockery/mockery": "~0.9.1"
@@ -414,54 +519,7 @@
                 "mail",
                 "mailer"
             ],
-            "time": "2014-12-05 14:17:14"
-        },
-        {
-            "name": "symfony/process",
-            "version": "v2.6.4",
-            "target-dir": "Symfony/Component/Process",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/Process.git",
-                "reference": "ecfc23e89d9967999fa5f60a1e9af7384396e9ae"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Process/zipball/ecfc23e89d9967999fa5f60a1e9af7384396e9ae",
-                "reference": "ecfc23e89d9967999fa5f60a1e9af7384396e9ae",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.6-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Symfony\\Component\\Process\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Symfony Community",
-                    "homepage": "http://symfony.com/contributors"
-                },
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                }
-            ],
-            "description": "Symfony Process Component",
-            "homepage": "http://symfony.com",
-            "time": "2015-01-25 04:39:26"
+            "time": "2015-01-18 13:49:36"
         }
     ],
     "packages-dev": [],
