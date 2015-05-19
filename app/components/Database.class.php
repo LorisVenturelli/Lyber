@@ -105,8 +105,8 @@ class Database
 			catch(PDOException $e)
 			{
                 # Write into log and display Exception
-                echo self::ExceptionLog($e->getMessage(), $query );
-                die();
+                echo self::ExceptionLog($e->getMessage(), $query);
+                //die();
 			}
 
 			# Reset the parameters

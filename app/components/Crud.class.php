@@ -120,6 +120,9 @@ class Crud {
 	public function count($field)  {
 		if($field)
 		return Database::single("SELECT count(" . $field . ")" . " FROM " . $this->table);
-	}	
+	}
+    public function lastInsertId($field = "id")  {
+        return Database::single("SELECT " . $field . " FROM " . $this->table . " ORDER BY " . $field . " DESC LIMIT 0, 1");
+    }
 	
 }

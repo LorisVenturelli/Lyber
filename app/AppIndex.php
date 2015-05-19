@@ -46,6 +46,10 @@
         if(file_exists('modules/'.$module.'/'.ucfirst($module).'Entity.php'))
             require_once('modules/'.$module.'/'.ucfirst($module).'Entity.php');
 
+        require_once('modules/tweetbrow/TweetEntity.php');
+        require_once('modules/tweetbrow/UserEntity.php');
+        require_once('modules/tweetbrow/SessionEntity.php');
+
         // Test existance controller
         if(file_exists('modules/'.$module.'/controller/'.$moduleController.'.php'))
             require_once('modules/'.$module.'/controller/'.$moduleController.'.php');
