@@ -22,26 +22,6 @@
             return $user;
         }
 
-		public static function showAction($param)
-		{
-            $tweet = new Tweet();
-            $user = new User();
-
-            $new = new User();
-            $new->login = "loriszv4";
-            $new->email = "venturelli.loris@gmail.com";
-            $new->password = "test";
-            $new->pseudo = "Lorisssss";
-            //$saved = $new->Create();
-
-            $newtweet = new Tweet();
-            $newtweet->author = $new->lastInsertId();
-            $newtweet->message = "Nouveau tweet de sa maman jolie <3";
-            //$newsaved = $newtweet->Create();
-
-			return json_encode($tweet->all()) . json_encode($user->all());
-		}
-
         public static function connectAction()
         {
             $data = Core::getParams('post');
@@ -90,6 +70,26 @@
             );
 
             return Core::json($params, true, 'Connexion avec succès.');
+        }
+
+        public static function logoutAction()
+        {
+            try {
+
+                self::secureUserAPI();
+
+                $token = Core::getParam('token');
+
+                $session = new Session();
+                $session->delete($token);
+
+                return Core::json(array(), true, "Déconnecté avec succès.");
+
+            } catch(Exception $e) {
+
+                return Core::json(array(), false, $e->getMessage());
+
+            }
         }
 
         public static function timelineAction()
@@ -176,6 +176,7 @@
         private static function tweetAdd($user)
         {
             $message = trim(Core::getParam("message"));
+            $id_parent = Core::getParam("tweet_parent");
 
             if(empty($message))
                 throw new Exception("Message vide.");
@@ -185,6 +186,10 @@
             $tweet = new Tweet();
             $tweet->author = $user->id;
             $tweet->message = $message;
+
+            if(!empty($id_parent))
+                $tweet->response = $id_parent;
+
             $success = $tweet->Create();
 
             if(!$success)
