@@ -24,9 +24,10 @@
 
         public static function connectAction()
         {
-            $data = Core::getParams('post');
 
             try {
+
+                $data = Core::getParams('post');
 
                 Core::require_data([
                     $data['login'] => ['notempty','string'],
@@ -63,9 +64,9 @@
             }
 
             $params = array(
+                "id" => $user->id,
                 "token" => $session->token,
                 "login" => $user->login,
-                "email" => $user->email,
                 "pseudo" => $user->pseudo
             );
 
@@ -92,6 +93,37 @@
             }
         }
 
+        public static function registerAction()
+        {
+            try {
+
+                $data = Core::getParams('post');
+
+                if(empty($data["login"]) || empty($data["pseudo"]) || empty($data["password"]) || empty($data["email"]))
+                    throw new Exception("Informations manquantes !");
+
+                if(!filter_var($data["email"], FILTER_VALIDATE_EMAIL))
+                    throw new Exception("Email invalide !");
+
+                $user = new User();
+                $user->login = $data["login"];
+                $user->pseudo = $data["pseudo"];
+                $user->password = md5($data["password"]);
+                $user->email = $data["email"];
+                $created = $user->Create();
+
+                if(!$created)
+                    throw new Exception("Login déjà existant !");
+
+                return Core::json(array(), true, "Enregistré avec succès.");
+
+            } catch(Exception $e) {
+
+                return Core::json(array(), false, $e->getMessage());
+
+            }
+        }
+
         public static function timelineAction()
         {
             try {
@@ -103,7 +135,7 @@
                     "author2" => $user->id,
                     "author3" => $user->id
                 );
-                $all_tweets = Database::query("SELECT *
+                $all_tweets = Database::query("SELECT id, author, message, date_create, response
                                               FROM tweets
                                               WHERE author = :author
                                               OR author
@@ -116,10 +148,31 @@
                                                       WHERE id_user = :author3)
                                               ORDER BY date_create DESC", $bind);
 
-                if(!$all_tweets)
+                if(!$all_tweets && !empty($all_tweets))
                     throw new Exception("Erreur !");
-                else
-                    return Core::json($all_tweets, true, 'Listage des tweets avec succès.');
+
+                foreach($all_tweets as $key => $tweet) {
+                    $query = Database::query("SELECT login, pseudo FROM users WHERE id = :iduser", array("iduser" => $tweet["author"]));
+
+                    unset($all_tweets[$key]["author"]);
+
+                    $all_tweets[$key]["login"] = $query[0]["login"];
+                    $all_tweets[$key]["pseudo"] = $query[0]["pseudo"];
+
+                    $params = array(
+                        "idtweet" => $tweet["id"],
+                        "iduser" => $tweet["author"]
+                    );
+
+                    $retweet = Database::single("SELECT COUNT(id_tweet) FROM retweets WHERE id_tweet = :idtweet AND id_user = :iduser", $params);
+                    $all_tweets[$key]["retweet"] = ($retweet == 1) ? true : false;
+
+                    $favoris = Database::single("SELECT COUNT(id_tweet) FROM favoris WHERE id_tweet = :idtweet AND id_user = :iduser", $params);
+                    $all_tweets[$key]["favoris"] = ($favoris == 1) ? true : false;
+
+                }
+
+                return Core::json($all_tweets, true, 'Listage des tweets avec succès.');
 
             } catch (Exception $e) {
 
@@ -127,6 +180,83 @@
 
             }
 
+        }
+
+
+        public static function followAction($id_following)
+        {
+            try {
+
+                $user = self::secureUserAPI();
+
+                $bind = array(
+                    "id_follower" => $user->id,
+                    "id_following" => $id_following
+                );
+                $insert = Database::query("INSERT INTO follows (id_follower, id_following) VALUES (:id_follower, :id_following)", $bind);
+
+                if(!$insert)
+                    throw new Exception("Vous suivez déjà cet utilisateur.");
+
+                return Core::json(array(), true, 'Suivi avec succès.');
+
+            } catch (Exception $e) {
+
+                return Core::json(array(), false, $e->getMessage());
+
+            }
+        }
+
+        public static function unfollowAction($id_following)
+        {
+            try {
+
+                $user = self::secureUserAPI();
+
+                $bind = array(
+                    "id_follower" => $user->id,
+                    "id_following" => $id_following
+                );
+                $delete = Database::query("DELETE FROM follows WHERE id_follower = :id_follower AND id_following = :id_following", $bind);
+
+                if(!$delete)
+                    throw new Exception("Follow inexistant !");
+
+                return Core::json(array(), true, 'Follow supprimed !');
+
+            } catch (Exception $e) {
+
+                return Core::json(array(), false, $e->getMessage());
+
+            }
+        }
+
+        public static function userAction($action)
+        {
+            try {
+
+                $me = self::secureUserAPI();
+
+                $all_users = Database::query("SELECT id, login, pseudo FROM users ORDER BY id DESC");
+
+                if(!$all_users && !empty($all_users))
+                    throw new Exception("Erreur !");
+
+                foreach($all_users as $key => $user) {
+
+                    $follow = Database::single("SELECT COUNT(id_follower) FROM follows WHERE id_follower = :idme AND id_following = :idfollowing", array("idme" => $me->id, "idfollowing" => $user["id"]));
+
+                    $all_users[$key]["followed"] = ($follow == 1) ? true : false;
+
+                }
+
+                return Core::json($all_users, true, 'Listage des tweets avec succès.');
+
+            } catch (Exception $e) {
+
+                return Core::json(array(), false, $e->getMessage());
+
+            }
         }
 
         public static function tweetAction($action)
@@ -176,7 +306,7 @@
         private static function tweetAdd($user)
         {
             $message = trim(Core::getParam("message"));
-            $id_parent = Core::getParam("tweet_parent");
+            $id_parent = Core::getParam("id_parent");
 
             if(empty($message))
                 throw new Exception("Message vide.");
@@ -186,16 +316,14 @@
             $tweet = new Tweet();
             $tweet->author = $user->id;
             $tweet->message = $message;
-
-            if(!empty($id_parent))
-                $tweet->response = $id_parent;
+            $tweet->response = $id_parent;
 
             $success = $tweet->Create();
 
             if(!$success)
                 throw new Exception("Erreur lors de l'enregistrement du tweet.");
-            else
-                return Core::json(array("new_id" => $tweet->lastInsertId()), true, 'Tweet enregistré avec succès.');
+
+            return Core::json(array("new_id" => $tweet->lastInsertId()), true, 'Tweet enregistré avec succès.');
 
         }
 
@@ -222,8 +350,8 @@
 
             if(!$tweet->delete())
                 throw new Exception("Erreur lors de la suppression..");
-            else
-                return Core::json(array(), true, "Tweet supprimé avec succès !");
+
+            return Core::json(array(), true, "Tweet supprimé avec succès !");
 
 
         }
@@ -249,8 +377,8 @@
 
             if(!$insert)
                 throw new Exception("Erreur lors du retweet !");
-            else
-                return Core::json(array(), true, "Retweeter avec succès !");
+
+            return Core::json(array(), true, "Retweeter avec succès !");
         }
 
         private static function tweetUnRetweet($user)
@@ -268,8 +396,8 @@
 
             if(!$delete)
                 throw new Exception("Erreur lors de l'annulation du retweet !");
-            else
-                return Core::json(array(), true, "Retweet annulé !");
+
+            return Core::json(array(), true, "Retweet annulé !");
         }
 
         private static function tweetFavoris($user)
@@ -294,8 +422,8 @@
 
             if(!$insert)
                 throw new Exception("Erreur lors du fav !");
-            else
-                return Core::json(array(), true, "Favorisé avec succès !");
+
+            return Core::json(array(), true, "Favorisé avec succès !");
         }
 
         private static function tweetUnFavoris($user)
@@ -314,8 +442,8 @@
 
             if(!$delete)
                 throw new Exception("Erreur lors de l'annulation du fav !");
-            else
-                return Core::json(array(), true, "Défavorisé avec succès !");
+
+            return Core::json(array(), true, "Défavorisé avec succès !");
         }
 
 
