@@ -1,5 +1,4 @@
 config/*.ini
 logs/
-vendor/
 .idea/
 template/webarch/

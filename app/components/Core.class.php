@@ -62,7 +62,7 @@ class Core {
     }
 
     public static function getRequest() {
-        $default = 'index.php';
+        $default = 'app/AppIndex.php';
 
         $request = self::parseRequest();
         $url = parse_url($request);
@@ -177,6 +177,12 @@ class Core {
             
     }
 
+    /**
+     * @param $data
+     * @param bool $code
+     * @param string $message
+     * @return String
+     */
     public static function json($data, $code=true, $message=""){
 
         if(!is_array($data)){
@@ -193,6 +199,22 @@ class Core {
 
         Flight::redirect($url);
 
+    }
+
+    public static function multi_implode($array, $glue) {
+        $ret = '';
+
+        foreach ($array as $item) {
+            if (is_array($item)) {
+                $ret .= self::multi_implode($item, $glue) . $glue;
+            } else {
+                $ret .= $item . $glue;
+            }
+        }
+
+        $ret = substr($ret, 0, 0-strlen($glue));
+
+        return $ret;
     }
 
 }

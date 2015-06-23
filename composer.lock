@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/filp/whoops.git",
-                "reference": "dcce91553e2e056857f1ea844949e9a8a71b613d"
+                "reference": "37b5e653c99cbb9113108d7dc59a0ddc306acc46"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filp/whoops/zipball/dcce91553e2e056857f1ea844949e9a8a71b613d",
-                "reference": "dcce91553e2e056857f1ea844949e9a8a71b613d",
+                "url": "https://api.github.com/repos/filp/whoops/zipball/37b5e653c99cbb9113108d7dc59a0ddc306acc46",
+                "reference": "37b5e653c99cbb9113108d7dc59a0ddc306acc46",
                 "shasum": ""
             },
             "require": {
@@ -62,20 +62,20 @@
                 "whoops",
                 "zf2"
             ],
-            "time": "2015-02-17 15:50:31"
+            "time": "2015-05-29 15:12:07"
         },
         {
             "name": "matthiasmullie/minify",
-            "version": "1.3.23",
+            "version": "1.3.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthiasmullie/minify.git",
-                "reference": "e15f77b7f6ce4c54bb566934984e4c0cc8931ee4"
+                "reference": "15e564ff494186cddefd82fa9424897a66a50051"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthiasmullie/minify/zipball/e15f77b7f6ce4c54bb566934984e4c0cc8931ee4",
-                "reference": "e15f77b7f6ce4c54bb566934984e4c0cc8931ee4",
+                "url": "https://api.github.com/repos/matthiasmullie/minify/zipball/15e564ff494186cddefd82fa9424897a66a50051",
+                "reference": "15e564ff494186cddefd82fa9424897a66a50051",
                 "shasum": ""
             },
             "require": {
@@ -85,7 +85,8 @@
             },
             "require-dev": {
                 "phpunit/phpunit": "4.3.*",
-                "satooshi/php-coveralls": "dev-master"
+                "satooshi/php-coveralls": "dev-master",
+                "scrapbook/psr-cache": "~0.2"
             },
             "bin": [
                 "bin/minifycss",
@@ -118,20 +119,20 @@
                 "minifier",
                 "minify"
             ],
-            "time": "2015-03-12 15:11:36"
+            "time": "2015-05-13 16:03:46"
         },
         {
             "name": "matthiasmullie/path-converter",
-            "version": "1.0.3",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthiasmullie/path-converter.git",
-                "reference": "c9feee12fce2656bf437396e543ab03d192f497f"
+                "reference": "b1e31c51e8c207ad6114f5b4ac4e652bc936c380"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthiasmullie/path-converter/zipball/c9feee12fce2656bf437396e543ab03d192f497f",
-                "reference": "c9feee12fce2656bf437396e543ab03d192f497f",
+                "url": "https://api.github.com/repos/matthiasmullie/path-converter/zipball/b1e31c51e8c207ad6114f5b4ac4e652bc936c380",
+                "reference": "b1e31c51e8c207ad6114f5b4ac4e652bc936c380",
                 "shasum": ""
             },
             "require": {
@@ -168,7 +169,7 @@
                 "paths",
                 "relative"
             ],
-            "time": "2015-02-21 12:51:32"
+            "time": "2015-06-01 15:20:30"
         },
         {
             "name": "mikecao/flight",
@@ -176,12 +177,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikecao/flight.git",
-                "reference": "0c8b665304a514d17bf72d0d2f6b11fa24c547cb"
+                "reference": "e715471a2cfc0db3557381610659ee99c1d391d2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikecao/flight/zipball/0c8b665304a514d17bf72d0d2f6b11fa24c547cb",
-                "reference": "0c8b665304a514d17bf72d0d2f6b11fa24c547cb",
+                "url": "https://api.github.com/repos/mikecao/flight/zipball/e715471a2cfc0db3557381610659ee99c1d391d2",
+                "reference": "e715471a2cfc0db3557381610659ee99c1d391d2",
                 "shasum": ""
             },
             "require": {
@@ -208,7 +209,7 @@
             ],
             "description": "Flight is a fast, simple, extensible framework for PHP. Flight enables you to quickly and easily build RESTful web applications.",
             "homepage": "http://flightphp.com",
-            "time": "2015-01-13 07:33:36"
+            "time": "2015-04-15 04:47:05"
         },
         {
             "name": "monolog/monolog",
@@ -326,12 +327,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/oscarotero/simple-crud.git",
-                "reference": "77d9f54d29bd714752e8a167766dd38c83fff258"
+                "reference": "ed7cae37f8438301aa3bb125eb0bc8d63b8dd521"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oscarotero/simple-crud/zipball/77d9f54d29bd714752e8a167766dd38c83fff258",
-                "reference": "77d9f54d29bd714752e8a167766dd38c83fff258",
+                "url": "https://api.github.com/repos/oscarotero/simple-crud/zipball/ed7cae37f8438301aa3bb125eb0bc8d63b8dd521",
+                "reference": "ed7cae37f8438301aa3bb125eb0bc8d63b8dd521",
                 "shasum": ""
             },
             "require": {
@@ -362,7 +363,7 @@
                 "mysql",
                 "sqlite"
             ],
-            "time": "2015-03-16 17:56:45"
+            "time": "2015-05-02 12:19:38"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -415,53 +416,6 @@
                 "mailer"
             ],
             "time": "2014-12-05 14:17:14"
-        },
-        {
-            "name": "symfony/process",
-            "version": "v2.6.4",
-            "target-dir": "Symfony/Component/Process",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/Process.git",
-                "reference": "ecfc23e89d9967999fa5f60a1e9af7384396e9ae"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Process/zipball/ecfc23e89d9967999fa5f60a1e9af7384396e9ae",
-                "reference": "ecfc23e89d9967999fa5f60a1e9af7384396e9ae",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.3"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.6-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Symfony\\Component\\Process\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Symfony Community",
-                    "homepage": "http://symfony.com/contributors"
-                },
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                }
-            ],
-            "description": "Symfony Process Component",
-            "homepage": "http://symfony.com",
-            "time": "2015-01-25 04:39:26"
         }
     ],
     "packages-dev": [],

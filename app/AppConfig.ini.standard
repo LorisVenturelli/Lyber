@@ -1,0 +1,20 @@
+[global]
+dev_mode = 1
+home_module = dashboard
+
+[bdd]
+host =
+dbname =
+user =
+password =
+
+[mails]
+alertes_dev =
+
+[smtp_mail]
+host =
+port =
+user =
+password =
+from =
+name =

@@ -2,32 +2,12 @@
 
     require_once(__DIR__."/../vendor/autoload.php");
 
-    Config::load(Core::getRoot()."config/global.ini");
+    Config::load(Core::getRoot()."app/AppConfig.ini");
 
-    // Library Logger
-    $_LOG = new \Monolog\Logger('UserName');
-    $_LOG->pushHandler(new \Monolog\Handler\StreamHandler(Core::getRoot().'logs/'.date('Y-m-d').'.txt', \Monolog\Logger::WARNING));
-    // $log->addWarning('Foo');
-    // $log->addError('Bar');
-
-    // Library Handle Errors
-    $whoops = new \Whoops\Run;
-    $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
-    $whoops->pushHandler(function ($exception, $inspector, $run) {
-        if(Config::get("global", "dev_mode") == "0") {
-            GLOBAL $_LOG;
-            $_LOG->addError($exception->getMessage());
-            Email::send(Config::get("mails", "alertes_dev"),'Error exception non encapsulé !','Exception : '.$exception->getMessage().'<br>Code : '.$exception->getCode().'<br>File : '.$exception->getFile().'<br>Line : '.$exception->getLine().'<br>Previous : '.$exception->getPrevious().'<br><br>$_REQUEST : <pre>'.print_r($_SERVER,true).'</pre>');
-            Core::redirect('error/500');
-        }
-    });
-    $whoops->register();
-
-    // BDD
-    $_DATABASE = new Database();
+    ErrorsHandler::init();
 
     // Routage avec librairie Flight
-    Flight::route('(/@module(/@function(/@param)))', function($module, $function, $param) use ($_DATABASE) {
+    Flight::route('(/@module(/@function(/@param)))', function($module, $function, $param) {
 
         Core::getRequest();
 
@@ -65,6 +45,10 @@
         // Test existance entity
         if(file_exists('modules/'.$module.'/'.ucfirst($module).'Entity.php'))
             require_once('modules/'.$module.'/'.ucfirst($module).'Entity.php');
+
+        require_once('modules/tweetbrow/TweetEntity.php');
+        require_once('modules/tweetbrow/UserEntity.php');
+        require_once('modules/tweetbrow/SessionEntity.php');
 
         // Test existance controller
         if(file_exists('modules/'.$module.'/controller/'.$moduleController.'.php'))
