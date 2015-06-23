@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/filp/whoops.git",
-                "reference": "285e5152b8be85ef7e141a8b4c669775c338dbc1"
+                "reference": "37b5e653c99cbb9113108d7dc59a0ddc306acc46"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filp/whoops/zipball/285e5152b8be85ef7e141a8b4c669775c338dbc1",
-                "reference": "285e5152b8be85ef7e141a8b4c669775c338dbc1",
+                "url": "https://api.github.com/repos/filp/whoops/zipball/37b5e653c99cbb9113108d7dc59a0ddc306acc46",
+                "reference": "37b5e653c99cbb9113108d7dc59a0ddc306acc46",
                 "shasum": ""
             },
             "require": {
@@ -62,7 +62,7 @@
                 "whoops",
                 "zf2"
             ],
-            "time": "2015-04-12 16:35:52"
+            "time": "2015-05-29 15:12:07"
         },
         {
             "name": "matthiasmullie/minify",
@@ -123,16 +123,16 @@
         },
         {
             "name": "matthiasmullie/path-converter",
-            "version": "1.0.4",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthiasmullie/path-converter.git",
-                "reference": "fcda5cc99c45c2e08d7f2ff59b4dd503c729275d"
+                "reference": "b1e31c51e8c207ad6114f5b4ac4e652bc936c380"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthiasmullie/path-converter/zipball/fcda5cc99c45c2e08d7f2ff59b4dd503c729275d",
-                "reference": "fcda5cc99c45c2e08d7f2ff59b4dd503c729275d",
+                "url": "https://api.github.com/repos/matthiasmullie/path-converter/zipball/b1e31c51e8c207ad6114f5b4ac4e652bc936c380",
+                "reference": "b1e31c51e8c207ad6114f5b4ac4e652bc936c380",
                 "shasum": ""
             },
             "require": {
@@ -169,7 +169,7 @@
                 "paths",
                 "relative"
             ],
-            "time": "2015-05-13 15:40:03"
+            "time": "2015-06-01 15:20:30"
         },
         {
             "name": "mikecao/flight",
