@@ -161,14 +161,14 @@
 
                     $params = array(
                         "idtweet" => $tweet["id"],
-                        "iduser" => $tweet["author"]
+                        "iduser" => $user->id
                     );
 
-                    $retweet = Database::single("SELECT COUNT(id_tweet) FROM retweets WHERE id_tweet = :idtweet AND id_user = :iduser", $params);
-                    $all_tweets[$key]["retweet"] = ($retweet == 1) ? true : false;
+                    $retweet = Database::single("SELECT COUNT(*) FROM retweets WHERE id_tweet = :idtweet AND id_user = :iduser", $params);
+                    $all_tweets[$key]["retweet"] = ($retweet == "1") ? true : false;
 
-                    $favoris = Database::single("SELECT COUNT(id_tweet) FROM favoris WHERE id_tweet = :idtweet AND id_user = :iduser", $params);
-                    $all_tweets[$key]["favoris"] = ($favoris == 1) ? true : false;
+                    $favoris = Database::single("SELECT COUNT(*) FROM favoris WHERE id_tweet = :idtweet AND id_user = :iduser", $params);
+                    $all_tweets[$key]["favoris"] = ($favoris == "1") ? true : false;
 
                 }
 
@@ -316,7 +316,9 @@
             $tweet = new Tweet();
             $tweet->author = $user->id;
             $tweet->message = $message;
-            $tweet->response = $id_parent;
+
+            if(!is_null($id_parent))
+                $tweet->response = $id_parent;
 
             $success = $tweet->Create();
 

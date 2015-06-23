@@ -177,6 +177,12 @@ class Core {
             
     }
 
+    /**
+     * @param $data
+     * @param bool $code
+     * @param string $message
+     * @return String
+     */
     public static function json($data, $code=true, $message=""){
 
         if(!is_array($data)){
