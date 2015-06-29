@@ -183,7 +183,7 @@ class Core {
      * @param string $message
      * @return String
      */
-    public static function json($data, $code=true, $message=""){
+    public static function jsonResponse($code = true, $message = "", $data = array()){
 
         if(!is_array($data)){
             $data = array($data);

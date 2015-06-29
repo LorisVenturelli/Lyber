@@ -3,6 +3,10 @@
 	class CovoicarViewController extends ModuleViewController
 	{
 
+        /**
+         * @return User
+         * @throws Exception
+         */
         private static function secureUserAPI()
         {
             $data = Core::getParams('post');
@@ -22,7 +26,60 @@
             return $user;
         }
 
+        public static function coordinateAction($param){
 
+            try {
+
+                self::secureUserAPI();
+                $data = Core::getParams("post");
+
+                if(empty($data["start"]) || empty($data["arrival"]))
+                    throw new Exception("start ou arrival non renseigné !");
+
+                $start = Database::row("SELECT ville_nom_reel AS ville,
+                                               ville_longitude_deg AS longitude,
+                                               ville_latitude_deg AS latitude
+                                        FROM villes_france
+                                        WHERE ville_nom_simple LIKE :citystart", array("citystart" => $data["start"]));
+
+                $arrival = Database::row("SELECT ville_nom_reel AS ville,
+                                                 ville_longitude_deg AS longitude,
+                                                 ville_latitude_deg AS latitude
+                                          FROM villes_france
+                                          WHERE ville_nom_simple LIKE :cityarrival", array("cityarrival" => $data["arrival"]));
+
+                if(!$start)
+                    throw new Exception("Ville start non trouvée");
+                else if(!$arrival)
+                    throw new Exception("Ville arrival non trouvée");
+
+                $return = array(
+                    "start" => array(
+                        "name" => $start["ville"],
+                        "longitude" => $start["longitude"],
+                        "latitude" => $start["latitude"]
+                    ),
+                    "arrival" => array(
+                        "name" => $arrival["ville"],
+                        "longitude" => $arrival["longitude"],
+                        "latitude" => $arrival["latitude"]
+                    )
+                );
+
+                return Core::jsonResponse(true, "Ville trouvée avec succès.", $return);
+
+            } catch (Exception $e) {
+
+                return Core::jsonResponse(false, $e->getMessage());
+
+            }
+
+        }
+
+        /**
+         * @param $action
+         * @return JSon
+         */
         public static function carAction($action){
 
             try {
@@ -49,7 +106,7 @@
 
             } catch (Exception $e) {
 
-                return Core::json(array(), false, $e->getMessage());
+                return Core::jsonResponse(false, $e->getMessage());
 
             }
 
@@ -80,7 +137,7 @@
             if(!$created)
                 throw new Exception("Erreur lors de la création de la voiture !");
             else
-                return Core::json(array(), true, "Voiture enregistrée avec succès !");
+                return Core::jsonResponse(true, "Voiture enregistrée avec succès !");
         }
 
         private static function carEdit($user)
@@ -112,7 +169,7 @@
 
             $car->save();
 
-            return Core::json(array(), true, "Voiture éditée avec succès !");
+            return Core::jsonResponse(true, "Voiture éditée avec succès !");
         }
 
         private static function carDelete($user)
@@ -133,7 +190,7 @@
             if(!$car->delete())
                 throw new Exception("Erreur lors de la suppression..");
 
-            return Core::json(array(), true, "Voiture supprimée avec succès !");
+            return Core::jsonResponse(true, "Voiture supprimée avec succès !");
         }
 
         public static function userAction($action){
@@ -165,6 +222,16 @@
                         return self::userDelete($user);
                         break;
 
+                    case 'info':
+                        $user = self::secureUserAPI();
+                        return self::userInfo($user);
+                        break;
+
+                    case 'getbyid':
+                        $user = self::secureUserAPI();
+                        return self::userGetById($user);
+                        break;
+
                     default:
                         throw new Exception("User action inconnue.");
                         break;
@@ -172,7 +239,7 @@
 
             } catch (Exception $e) {
 
-                return Core::json(array(), false, $e->getMessage());
+                return Core::jsonResponse(false, $e->getMessage());
 
             }
 
@@ -183,12 +250,14 @@
         {
             $data = Core::getParams('post');
 
+            Log::addWarning("useradd:".implode(', ', $data));
+
             if(empty($data['email'])
                 || empty($data['password'])
                 || empty($data['repassword'])
                 || empty($data['lastname'])
                 || empty($data['firstname'])
-                || empty($data['gender'])
+                || $data['gender'] == ""
                 || empty($data['birthday'])
             ){
                 throw new Exception("Informations manquantes !");
@@ -200,6 +269,8 @@
                 throw new Exception("Mot de passe trop court !");
             else if($data["password"] != $data["repassword"])
                 throw new Exception("Les 2 mots de passes correspondent pas !");
+            else if(strlen($data["birthday"]) != 4 || $data["birthday"] < 1900 || $data["birthday"] >= 2015)
+                throw new Exception("L'année de naissance est incorrect !");
 
             $user = new User();
             $user->email = $data["email"];
@@ -213,17 +284,18 @@
             if(!$created)
                 throw new Exception("Email déjà existant !");
 
-            return Core::json(array(), true, "Enregistré avec succès.");
+            return Core::jsonResponse(true, "Enregistré avec succès.");
         }
 
         private static function userConnect()
         {
             $data = Core::getParams('post');
 
-            Core::require_data([
-                $data['email'] => ['notempty','string'],
-                $data['password'] => ['notempty','string']
-            ]);
+            Log::addWarning("connect:".implode(",", $data));
+
+            if(empty($data['email']) || empty($data['password'])){
+                throw new Exception("Informations manquantes !");
+            }
 
             // Connexion avec email
             if(!filter_var($data["email"], FILTER_VALIDATE_EMAIL))
@@ -247,12 +319,19 @@
                 $session->Create();
             }
 
-            $params = array(
+            $return = array(
                 "id" => $user->id,
-                "token" => $session->token
+                "token" => $session->token,
+                "email" => $user->email,
+                "lastname" => $user->lastname,
+                "firstname" => $user->firstname,
+                "phone" => ($user->phone == null) ? "" : $user->phone,
+                "bio" => ($user->bio == null) ? "" : $user->bio,
+                "birthday" => $user->birthday,
+                "gender" => $user->gender
             );
 
-            return Core::json($params, true, 'Connexion avec succès.');
+            return Core::jsonResponse(true, 'Connexion avec succès.', $return);
         }
 
 
@@ -263,7 +342,7 @@
             $session = new Session($token);
             $session->delete();
 
-            return Core::json(array(), true, "Déconnecté avec succès.");
+            return Core::jsonResponse(true, "Déconnecté avec succès.");
         }
 
         private static function userEdit($user)
@@ -296,7 +375,7 @@
 
             $user->save();
 
-            return Core::json(array(), true, "User édité avec succès !");
+            return Core::jsonResponse(true, "User édité avec succès !");
         }
 
         private static function userDelete($user)
@@ -313,7 +392,52 @@
             if(!$user->delete())
                 throw new Exception("Erreur lors de la suppression de l'user ..");
 
-            return Core::json(array(), true, "User supprimé avec succès !");
+            return Core::jsonResponse(true, "User supprimé avec succès !");
+        }
+
+        private static function userInfo($user)
+        {
+            $return = array(
+                "id" => $user->id,
+                "email" => $user->email,
+                "lastname" => $user->lastname,
+                "firstname" => $user->firstname,
+                "phone" => ($user->phone == null) ? "" : $user->phone,
+                "bio" => ($user->bio == null) ? "" : $user->bio,
+                "birthday" => $user->birthday,
+                "gender" => $user->gender
+            );
+
+            return Core::jsonResponse(true, "Informations utilisateur", $return);
+        }
+
+        private static function userGetById($user)
+        {
+            $data = Core::getParams("post");
+
+            if(empty($data["userid"]))
+                throw new Exception("User id non renseigné !");
+            else if(!is_numeric($data["userid"]))
+                throw new Exception("User id doit être un chiffre !");
+
+            $user = new User();
+            $user->find($data["userid"]);
+
+            $return = array(
+                "id" => $user->id,
+                "email" => $user->email,
+                "lastname" => $user->lastname,
+                "firstname" => $user->firstname,
+                "phone" => ($user->phone == null) ? "" : $user->phone,
+                "bio" => ($user->bio == null) ? "" : $user->bio,
+                "birthday" => $user->birthday,
+                "gender" => $user->gender
+            );
+
+            if(empty($user->variables))
+                throw new Exception("Utilisateur introuvable ..");
+
+            return Core::jsonResponse(true, "Utilisateur trouvé avec succès !", $return);
         }
 
         public static function tripAction($action){
@@ -342,7 +466,7 @@
 
             } catch (Exception $e) {
 
-                return Core::json(array(), false, $e->getMessage());
+                return Core::jsonResponse(false, $e->getMessage());
 
             }
 
@@ -354,7 +478,7 @@
 
             if(empty($data['start'])
                 || empty($data['arrival'])
-                || empty($data['highway'])
+                || $data['highway'] == ""
                 || empty($data['hourStart'])
                 || empty($data['price'])
                 || empty($data['place'])
@@ -364,6 +488,12 @@
 
             if(!is_string($data["start"]) || !is_string($data["arrival"]))
                 throw new Exception("start ou arrival n'est pas un string !");
+            else if($data["start"] == $data["arrival"])
+                throw new Exception("Le ville de départ doit être différente de celle d'arrivée !");
+            else if(strtotime($data["hourStart"]) <= time())
+                throw new Exception("Date et heure de départ incorrect ! Elle doit être supérieur de celle actuelle.");
+            else if($data["roundTrip"] <= $data["hourStart"])
+                throw new Exception("La date et heure du retour doit être supérieur à celles de l'allé.");
 
             $trip = new Trip();
             $trip->driver = $user->id;
@@ -397,7 +527,7 @@
             if(!$created)
                 throw new Exception("Erreur lors de la création de la voiture !");
 
-            return Core::json(array(), true, "Trip enregistré avec succès !");
+            return Core::jsonResponse(true, "Trip enregistré avec succès !");
         }
 
         private static function tripEdit($user)
@@ -435,7 +565,7 @@
 
             $trip->save();
 
-            return Core::json(array(), true, "Trip éditée avec succès !");
+            return Core::jsonResponse(true, "Trip éditée avec succès !");
         }
 
         private static function tripDelete($user)
@@ -458,7 +588,7 @@
 
             Database::query("DELETE FROM trips WHERE id = :roundtrip", array('roundtrip' => $trip->roundTrip));
 
-            return Core::json(array(), true, "Trip supprimée avec succès !");
+            return Core::jsonResponse(true, "Trip supprimée avec succès !");
         }
 
         public static function travelAction($action){
@@ -476,6 +606,10 @@
                         return self::travelDelete($user);
                         break;
 
+                    case 'list':
+                        return self::travelList($user);
+                    break;
+
                     default:
                         throw new Exception("Action travel inconnue.");
                         break;
@@ -483,7 +617,7 @@
 
             } catch (Exception $e) {
 
-                return Core::json(array(), false, $e->getMessage());
+                return Core::jsonResponse(false, $e->getMessage());
 
             }
 
@@ -506,7 +640,7 @@
             if(!$insert)
                 throw new Exception("Vous participez déjà au voyage.");
 
-            return Core::json(array(), true, "Voyage enregistré avec succès !");
+            return Core::jsonResponse(true, "Voyage enregistré avec succès !");
         }
 
         private static function travelDelete($user)
@@ -525,10 +659,24 @@
             if(!$delete)
                 throw new Exception("Ce voyage n'existe pas !");
 
-            return Core::json(array(), true, "Voyage supprimée avec succès !");
+            return Core::jsonResponse(true, "Voyage supprimé avec succès !");
         }
 
+        private static function travelList($user)
+        {
+            $params = array(
+                "iduser" => $user->id,
+                "iduser2" => $user->id
+            );
+            $listTravels = Database::query("SELECT *
+                                            FROM trips
+                                            WHERE driver = :iduser
+                                            OR id = (SELECT id_trip
+                                                     FROM travels
+                                                     WHERE id_user = :iduser2)
+                                            ORDER BY hourStart ASC", $params);
 
-
+            return Core::jsonResponse(true, "Listage des trajets avec succès !", $listTravels);
+        }
 
     }
