@@ -40,13 +40,13 @@
                                                ville_longitude_deg AS longitude,
                                                ville_latitude_deg AS latitude
                                         FROM villes_france
-                                        WHERE ville_nom_simple LIKE :citystart", array("citystart" => $data["start"]));
+                                        WHERE ville_nom_simple LIKE :citystart", array("citystart" => trim($data["start"])));
 
                 $arrival = Database::row("SELECT ville_nom_reel AS ville,
                                                  ville_longitude_deg AS longitude,
                                                  ville_latitude_deg AS latitude
                                           FROM villes_france
-                                          WHERE ville_nom_simple LIKE :cityarrival", array("cityarrival" => $data["arrival"]));
+                                          WHERE ville_nom_simple LIKE :cityarrival", array("cityarrival" => trim($data["arrival"])));
 
                 if(!$start)
                     throw new Exception("Ville start non trouvée");
@@ -340,7 +340,9 @@
             $token = Core::getParam('token');
 
             $session = new Session($token);
-            $session->delete();
+
+            if($session->delete())
+                throw new Exception("Erreur lors de la déconnexion !");
 
             return Core::jsonResponse(true, "Déconnecté avec succès.");
         }
@@ -420,22 +422,25 @@
             else if(!is_numeric($data["userid"]))
                 throw new Exception("User id doit être un chiffre !");
 
-            $user = new User();
-            $user->find($data["userid"]);
+            $aUser = new User();
+            $aUser->find($data["userid"]);
 
             $return = array(
-                "id" => $user->id,
-                "email" => $user->email,
-                "lastname" => $user->lastname,
-                "firstname" => $user->firstname,
-                "phone" => ($user->phone == null) ? "" : $user->phone,
-                "bio" => ($user->bio == null) ? "" : $user->bio,
-                "birthday" => $user->birthday,
-                "gender" => $user->gender
+                "id" => $aUser->id,
+                "token" => ($user->id == $aUser->id) ? $data["token"] : "",
+                "email" => $aUser->email,
+                "lastname" => $aUser->lastname,
+                "firstname" => $aUser->firstname,
+                "phone" => ($aUser->phone == null) ? "" : $user->phone,
+                "bio" => ($aUser->bio == null) ? "" : $user->bio,
+                "birthday" => $aUser->birthday,
+                "gender" => $aUser->gender
             );
 
-            if(empty($user->variables))
+            if(empty($aUser->variables)){
+                Log::addError("Utilisateur introuvable: userGetBtId(".$data["userid"].")");
                 throw new Exception("Utilisateur introuvable ..");
+            }
 
             return Core::jsonResponse(true, "Utilisateur trouvé avec succès !", $return);
         }
@@ -457,6 +462,10 @@
 
                     case 'delete':
                         return self::tripDelete($user);
+                        break;
+
+                    case 'search':
+                        return self::tripSearch($user);
                         break;
 
                     default:
@@ -492,7 +501,7 @@
                 throw new Exception("Le ville de départ doit être différente de celle d'arrivée !");
             else if(strtotime($data["hourStart"]) <= time())
                 throw new Exception("Date et heure de départ incorrect ! Elle doit être supérieur de celle actuelle.");
-            else if($data["roundTrip"] <= $data["hourStart"])
+            else if(!empty($data["roundTrip"]) && $data["roundTrip"] <= $data["hourStart"])
                 throw new Exception("La date et heure du retour doit être supérieur à celles de l'allé.");
 
             $trip = new Trip();
@@ -591,6 +600,58 @@
             return Core::jsonResponse(true, "Trip supprimée avec succès !");
         }
 
+        private static function tripSearch($user)
+        {
+            $data = Core::getParams('post');
+
+            if(!empty($data["start"]) || !empty($data["arrival"])){
+
+                if(empty($data['start'])
+                    || empty($data['arrival'])
+                    || empty($data['time'])
+                ){
+                    throw new Exception("Informations manquantes !");
+                }
+
+
+                if(!is_string($data["start"]) || !is_string($data["arrival"]))
+                    throw new Exception("start ou arrival n'est pas un string !");
+                else if($data["start"] == $data["arrival"])
+                    throw new Exception("Le ville de départ doit être différente de celle d'arrivée !");
+                else if(strtotime($data["time"]) <= time())
+                    throw new Exception("Date et heure de départ incorrect ! Elle doit être supérieur de celle actuelle.");
+
+                $params = array(
+                    "citystart" => trim($data["start"]),
+                    "cityarrival" => trim($data["arrival"]),
+                    "timedepart" => trim($data["time"])
+                );
+
+                $listTrips = Database::query("SELECT *
+                                              FROM trips
+                                              WHERE start LIKE :citystart
+                                              AND arrival LIKE :cityarrival
+                                              AND hourStart >= :timedepart", $params);
+            }
+            else {
+                $listTrips = Database::query("SELECT *
+                                              FROM trips");
+            }
+
+            foreach($listTrips as $key => $trip){
+                $paramsPlace = array(
+                    "idtrip" => $trip["id"]
+                );
+                $count = Database::single("SELECT count(*)
+                                           FROM travels
+                                           WHERE id_trip = :idtrip", $paramsPlace);
+
+                $listTrips[$key]["placeAvailable"] = "".$trip["place"] - $count."";
+            }
+
+            return Core::jsonResponse(true, count($listTrips)." trip trouvé(s) avec succès.", $listTrips);
+        }
+
         public static function travelAction($action){
 
             try {
@@ -670,11 +731,23 @@
             );
             $listTravels = Database::query("SELECT *
                                             FROM trips
-                                            WHERE driver = :iduser
+                                            WHERE (driver = :iduser
                                             OR id = (SELECT id_trip
                                                      FROM travels
-                                                     WHERE id_user = :iduser2)
+                                                     WHERE id_user = :iduser2))
+                                            AND hourStart >= NOW()
                                             ORDER BY hourStart ASC", $params);
+
+            foreach($listTravels as $key => $travel){
+                $paramsPlace = array(
+                    "idtrip" => $travel["id"]
+                );
+                $count = Database::single("SELECT count(*)
+                                           FROM travels
+                                           WHERE id_trip = :idtrip", $paramsPlace);
+
+                $listTravels[$key]["placeAvailable"] = "".$travel["place"] - $count."";
+            }
 
             return Core::jsonResponse(true, "Listage des trajets avec succès !", $listTravels);
         }
