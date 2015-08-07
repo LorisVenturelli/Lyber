@@ -1,1 +1,7 @@
-../matthiasmullie/minify/bin/minifyjs
+#!/usr/bin/env sh
+SRC_DIR="`pwd`"
+cd "`dirname "$0"`"
+cd "../matthiasmullie/minify/bin"
+BIN_TARGET="`pwd`/minifyjs"
+cd "$SRC_DIR"
+"$BIN_TARGET" "$@"

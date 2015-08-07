@@ -191,8 +191,13 @@ class Core {
 
         $reponse = ($code) ? "success" : "error";
 
-        return Flight::json(array('reponse'=>$reponse,'message'=>$message,'data'=>$data));
+        return array('reponse'=>$reponse,'message'=>$message,'data'=>$data);
 
+    }
+
+    public static function isJson($string) {
+        $ob = json_decode($json);
+        return ($ob !== null);
     }
 
     public static function redirect($url){
@@ -215,6 +220,23 @@ class Core {
         $ret = substr($ret, 0, 0-strlen($glue));
 
         return $ret;
+    }
+
+    public static function array_searchRecursive( $needle, $haystack, $strict=false, $path=array() )
+    {
+        if( !is_array($haystack) ) {
+            return false;
+        }
+        foreach( $haystack as $key => $val ) {
+            if( is_array($val) && $subPath = self::array_searchRecursive($needle, $val, $strict, $path) ) {
+                $path = array_merge($path, array($key), $subPath);
+                return $path;
+            } elseif( (!$strict && $val == $needle) || ($strict && $val === $needle) ) {
+                $path[] = $key;
+                return $path;
+            }
+        }
+        return false;
     }
 
 }
