@@ -1,23 +1,23 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e2e500ffc69e53e93582973700d11e2e",
+    "hash": "4f41b1880f5d3f85ea853ae2355c6165",
     "packages": [
         {
             "name": "filp/whoops",
-            "version": "dev-master",
+            "version": "1.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filp/whoops.git",
-                "reference": "37b5e653c99cbb9113108d7dc59a0ddc306acc46"
+                "reference": "72538eeb70bbfb11964412a3d098d109efd012f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filp/whoops/zipball/37b5e653c99cbb9113108d7dc59a0ddc306acc46",
-                "reference": "37b5e653c99cbb9113108d7dc59a0ddc306acc46",
+                "url": "https://api.github.com/repos/filp/whoops/zipball/72538eeb70bbfb11964412a3d098d109efd012f7",
+                "reference": "72538eeb70bbfb11964412a3d098d109efd012f7",
                 "shasum": ""
             },
             "require": {
@@ -62,20 +62,20 @@
                 "whoops",
                 "zf2"
             ],
-            "time": "2015-05-29 15:12:07"
+            "time": "2015-06-29 05:42:04"
         },
         {
             "name": "matthiasmullie/minify",
-            "version": "1.3.26",
+            "version": "1.3.27",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthiasmullie/minify.git",
-                "reference": "15e564ff494186cddefd82fa9424897a66a50051"
+                "reference": "5497bea3d1e25d14091a9dcb45a3aa326e4090f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthiasmullie/minify/zipball/15e564ff494186cddefd82fa9424897a66a50051",
-                "reference": "15e564ff494186cddefd82fa9424897a66a50051",
+                "url": "https://api.github.com/repos/matthiasmullie/minify/zipball/5497bea3d1e25d14091a9dcb45a3aa326e4090f7",
+                "reference": "5497bea3d1e25d14091a9dcb45a3aa326e4090f7",
                 "shasum": ""
             },
             "require": {
@@ -119,7 +119,7 @@
                 "minifier",
                 "minify"
             ],
-            "time": "2015-05-13 16:03:46"
+            "time": "2015-06-29 15:51:16"
         },
         {
             "name": "matthiasmullie/path-converter",
@@ -177,16 +177,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikecao/flight.git",
-                "reference": "e715471a2cfc0db3557381610659ee99c1d391d2"
+                "reference": "4bb1b49385af656c1246f51db236e834b827aef6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikecao/flight/zipball/e715471a2cfc0db3557381610659ee99c1d391d2",
-                "reference": "e715471a2cfc0db3557381610659ee99c1d391d2",
+                "url": "https://api.github.com/repos/mikecao/flight/zipball/4bb1b49385af656c1246f51db236e834b827aef6",
+                "reference": "4bb1b49385af656c1246f51db236e834b827aef6",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.6"
             },
             "type": "library",
             "autoload": {
@@ -209,7 +212,7 @@
             ],
             "description": "Flight is a fast, simple, extensible framework for PHP. Flight enables you to quickly and easily build RESTful web applications.",
             "homepage": "http://flightphp.com",
-            "time": "2015-04-15 04:47:05"
+            "time": "2015-06-23 04:56:51"
         },
         {
             "name": "monolog/monolog",
@@ -327,12 +330,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/oscarotero/simple-crud.git",
-                "reference": "ed7cae37f8438301aa3bb125eb0bc8d63b8dd521"
+                "reference": "4acbe682a3ada3fff0e74eb45f19aa0b82e529e7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oscarotero/simple-crud/zipball/ed7cae37f8438301aa3bb125eb0bc8d63b8dd521",
-                "reference": "ed7cae37f8438301aa3bb125eb0bc8d63b8dd521",
+                "url": "https://api.github.com/repos/oscarotero/simple-crud/zipball/4acbe682a3ada3fff0e74eb45f19aa0b82e529e7",
+                "reference": "4acbe682a3ada3fff0e74eb45f19aa0b82e529e7",
                 "shasum": ""
             },
             "require": {
@@ -363,7 +366,7 @@
                 "mysql",
                 "sqlite"
             ],
-            "time": "2015-05-02 12:19:38"
+            "time": "2015-08-06 17:54:04"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -424,7 +427,6 @@
     "stability-flags": {
         "swiftmailer/swiftmailer": 20,
         "mikecao/flight": 20,
-        "filp/whoops": 20,
         "monolog/monolog": 20,
         "simple-crud/simple-crud": 20
     },
