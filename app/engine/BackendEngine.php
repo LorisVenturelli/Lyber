@@ -7,15 +7,15 @@
         {
             Core::getRequest();
 
-            // Module par défault
+            // Module par dÃ©fault
             $module = (empty($module)) ? Config::get('global','backend_home_module') : $module;
-            // Fonction par défault
+            // Fonction par dÃ©fault
             $function = (empty($function)) ? 'show' : $function;
 
-            //Préfixe _ & Suffixe Action
+            //PrÃ©fixe _ & Suffixe Action
             $functionAction = (is_numeric($function) ? "_".$function : $function)."Action";
 
-            // Définition des noms des fichiers MVC
+            // DÃ©finition des noms des fichiers MVC
             $moduleController = ucfirst($module)."ViewController";
 
             if(!is_dir('modules/backend/'.$module))
@@ -25,19 +25,19 @@
             if(file_exists('modules/backend/'.$module.'/config/'.$function.'.ini'))
                 $config = parse_ini_file('modules/backend/'.$module.'/config/'.$function.'.ini', true);
             else
-                throw new Exception('Fichier de config '.$function.'.ini du module '.$module.' non trouvée !', 1);
+                throw new Exception('Fichier de config '.$function.'.ini du module '.$module.' non trouvÃ©e !', 1);
 
             $mod_config = parse_ini_file('modules/backend/BackendConfig.ini', true);
 
-            // TODO - Faire un controller pour cet héritage de config
-            // Héritage des configs modules
+            // TODO - Faire un controller pour cet hÃ©ritage de config
+            // HÃ©ritage des configs modules
             $config = array_replace_recursive($mod_config, $config);
 
             // Test existance controller
             if(file_exists('modules/backend/'.$module.'/controller/'.$moduleController.'.php'))
                 require_once('modules/backend/'.$module.'/controller/'.$moduleController.'.php');
             else
-                throw new Exception('Le '.$moduleController.'.php du module '.$module.' non trouvée !', 1);
+                throw new Exception('Le '.$moduleController.'.php du module '.$module.' non trouvÃ©e !', 1);
 
             // Test existance class controller
             if(!class_exists($moduleController))
@@ -47,7 +47,7 @@
             else
                 $data = $moduleController::$functionAction($param);
 
-            // Paramètre fullpage du view module
+            // ParamÃ¨tre fullpage du view module
             if($config['param']['fullpage'] == "0")
             {
                 // TODO - Gestionnaire de cache et minifer
@@ -77,65 +77,42 @@
 
                     if(!file_exists(Core::getRoot().'modules/backend/'.$module.'/cache/js'))
                         if(!mkdir(Core::getRoot().'modules/backend/'.$module.'/cache/js', 0777, true))
-                            throw new Exception('Echec lors de la création du dossier cache JS !');
+                            throw new Exception('Echec lors de la crÃ©ation du dossier cache JS !');
 
                     if(!file_exists(Core::getRoot().'modules/backend/'.$module.'/cache/js/'.$function.'.min.js'))
                         if(!fopen(Core::getRoot().'modules/backend/'.$module.'/cache/js/'.$function.'.min.js','w'))
-                            throw new Exception('Echec lors de la création du fichier cache JS !');
+                            throw new Exception('Echec lors de la crÃ©ation du fichier cache JS !');
 
                     if(!file_exists(Core::getRoot().'modules/backend/'.$module.'/cache/css'))
                         if(!mkdir(Core::getRoot().'modules/backend/'.$module.'/cache/css', 0777, true))
-                            throw new Exception('Echec lors de la création du dossier cache CSS !');
+                            throw new Exception('Echec lors de la crÃ©ation du dossier cache CSS !');
 
                     if(!file_exists(Core::getRoot().'modules/backend/'.$module.'/cache/js/'.$function.'.min.css'))
                         if(!fopen(Core::getRoot().'modules/backend/'.$module.'/cache/js/'.$function.'.min.css','w'))
-                            throw new Exception('Echec lors de la création du fichier cache CSS !');
+                            throw new Exception('Echec lors de la crÃ©ation du fichier cache CSS !');
 
                     Assets::saveCss(Core::getRoot().'modules/backend/'.$module.'/cache/css/'.$function.'.min.css');
                     Assets::saveJs(Core::getRoot().'modules/backend/'.$module.'/cache/js/'.$function.'.min.js');
                 }
 
-
-                // TODO - Templatisé le bordel
-
-                // Inclusion du header
-                ob_start();
-
-                include("template/backend/header.phtml");
-                $content_header = ob_get_contents();
-
-                ob_end_clean();
-
-                // Inclusion du sidebar
-                ob_start();
-
-                include("template/backend/sidebar.phtml");
-                $content_sidebar = ob_get_contents();
-
-                ob_end_clean();
-
-                // Inclusion du footer
-                ob_start();
-
-                include("template/backend/footer.phtml");
-                $content_footer = ob_get_contents();
-
-                ob_end_clean();
-            }
-            else {
-                $content_header = $content_sidebar = $content_footer = NULL;
             }
 
-            // HTML template du view module
-            ob_start();
+            Twig_Autoloader::register();
 
-            include("modules/backend/".$module."/view/".$function.".phtml");
-            $content_html = ob_get_contents();
+            $loader1 = new Twig_Loader_Filesystem('template/backend');
+            $loader2 = new Twig_Loader_Array(array(
+                'module_content' => file_get_contents("modules/backend/".$module."/view/".$function.".twig"),
+            ));
 
-            ob_end_clean();
+            $loader = new Twig_Loader_Chain(array($loader1, $loader2));
 
+            $twig = new Twig_Environment($loader);
+            echo $twig->render('index.twig', array(
+                'app' => array('abs_url' => Core::absURL()."admin"),
+                'assets' => array('directory' => Core::absURL()."template/backend/assets"),
+                'data' => $data
+            ));
 
-            echo $content_header . $content_sidebar . $content_html . $content_footer;
         }
 
     }

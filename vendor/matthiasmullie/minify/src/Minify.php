@@ -178,7 +178,7 @@ abstract class Minify
      * @param  string[optional] $path Path to write the data to.
      * @return string           The minified data.
      */
-    abstract protected function execute($path = null);
+    abstract public function execute($path = null);
 
     /**
      * Register a pattern to execute against the source content.
@@ -345,7 +345,7 @@ abstract class Minify
          * considered as escape-char (times 2) and to get it in the regex,
          * escaped (times 2)
          */
-        $this->registerPattern('/(['.$chars.'])(.*?((?<!\\\\)|\\\\\\\\+))\\1/s', $callback);
+        $this->registerPattern('/(['.$chars.'])(.*?(?<!\\\\)(\\\\\\\\)*+)\\1/s', $callback);
     }
 
     /**

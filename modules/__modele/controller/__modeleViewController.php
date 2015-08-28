@@ -1,6 +1,6 @@
 <?php
 	
-	class __modeleViewController extends ModuleViewController
+	class __modeleViewController extends ViewController
 	{
 
 	}
