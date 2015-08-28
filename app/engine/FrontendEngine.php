@@ -3,33 +3,24 @@
     class FrontendEngine
     {
 
-        public static function start($module, $function, $param)
+        public static function start($module, $function, $params)
         {
             Core::getRequest();
 
-            // Routes personnalisés
+            // Routes personnalisï¿½s
             $mod_config = parse_ini_file('modules/frontend/FrontendConfig.ini', true);
-            $route_personnalise = Core::array_searchRecursive(parse_url(Core::parseRequest(), PHP_URL_PATH), $mod_config['routes']);
 
-            $route_personnalise = explode('.', $route_personnalise[0]);
+            // Module par dï¿½fault
+            $module = (empty($module)) ? Config::get('global','frontend_home_module') : $module;
 
-            if(!empty($route_personnalise)) {
-                $module = $route_personnalise[0];
-                $function = $route_personnalise[1];
-            }
-            else {
-                // Module par défault
-                $module = (empty($module)) ? Config::get('global','frontend_home_module') : $module;
-
-                // Fonction par défault
-                $function = (empty($function)) ? 'show' : $function;
-            }
+            // Fonction par dï¿½fault
+            $function = (empty($function)) ? 'show' : $function;
 
 
-            //Préfixe _ & Suffixe Action
+            //Prï¿½fixe _ & Suffixe Action
             $functionAction = (is_numeric($function) ? "_".$function : $function)."Action";
 
-            // Définition des noms des fichiers MVC
+            // Dï¿½finition des noms des fichiers MVC
             $moduleController = ucfirst($module)."ViewController";
 
             if(!is_dir('modules/frontend/'.$module))
@@ -39,17 +30,17 @@
             if(file_exists('modules/frontend/'.$module.'/config/'.$function.'.ini'))
                 $config = parse_ini_file('modules/frontend/'.$module.'/config/'.$function.'.ini', true);
             else
-                throw new Exception('Fichier de config '.$function.'.ini du module '.$module.' non trouvée !', 1);
+                throw new Exception('Fichier de config '.$function.'.ini du module '.$module.' non trouvï¿½e !', 1);
 
-            // TODO - Faire un controller pour cet héritage de config
-            // Héritage des configs modules
+            // TODO - Faire un controller pour cet hï¿½ritage de config
+            // Hï¿½ritage des configs modules
             $config = array_replace_recursive($mod_config, $config);
 
             // Test existance controller
             if(file_exists('modules/frontend/'.$module.'/controller/'.$moduleController.'.php'))
                 require_once('modules/frontend/'.$module.'/controller/'.$moduleController.'.php');
             else
-                throw new Exception('Le '.$moduleController.'.php du module '.$module.' non trouvée !', 1);
+                throw new Exception('Le '.$moduleController.'.php du module '.$module.' non trouvï¿½e !', 1);
 
             // Test existance class controller
             if(!class_exists($moduleController))
@@ -57,9 +48,9 @@
             else if(!method_exists($moduleController, $functionAction))
                 throw new Exception('Function '.$moduleController.'::'.$functionAction.' n\'existe pas !', 1);
             else
-                $data = $moduleController::$functionAction($param);
-
-            // Paramètre fullpage du view module
+                $data = $moduleController::$functionAction($params);
+/*
+            // Paramï¿½tre fullpage du view module
             if($config['param']['fullpage'] == "0")
             {
                 // TODO - Gestionnaire de cache et minifer
@@ -89,65 +80,42 @@
 
                     if(!file_exists(Core::getRoot().'modules/frontend/'.$module.'/cache/js'))
                         if(!mkdir(Core::getRoot().'modules/frontend/'.$module.'/cache/js', 0777, true))
-                            throw new Exception('Echec lors de la création du dossier cache JS !');
+                            throw new Exception('Echec lors de la crï¿½ation du dossier cache JS !');
 
                     if(!file_exists(Core::getRoot().'modules/frontend/'.$module.'/cache/js/'.$function.'.min.js'))
                         if(!fopen(Core::getRoot().'modules/frontend/'.$module.'/cache/js/'.$function.'.min.js','w'))
-                            throw new Exception('Echec lors de la création du fichier cache JS !');
+                            throw new Exception('Echec lors de la crï¿½ation du fichier cache JS !');
 
                     if(!file_exists(Core::getRoot().'modules/frontend/'.$module.'/cache/css'))
                         if(!mkdir(Core::getRoot().'modules/frontend/'.$module.'/cache/css', 0777, true))
-                            throw new Exception('Echec lors de la création du dossier cache CSS !');
+                            throw new Exception('Echec lors de la crï¿½ation du dossier cache CSS !');
 
                     if(!file_exists(Core::getRoot().'modules/frontend/'.$module.'/cache/js/'.$function.'.min.css'))
                         if(!fopen(Core::getRoot().'modules/frontend/'.$module.'/cache/js/'.$function.'.min.css','w'))
-                            throw new Exception('Echec lors de la création du fichier cache CSS !');
+                            throw new Exception('Echec lors de la crÃ©ation du fichier cache CSS !');
 
                     Assets::saveCss(Core::getRoot().'modules/frontend/'.$module.'/cache/css/'.$function.'.min.css');
                     Assets::saveJs(Core::getRoot().'modules/frontend/'.$module.'/cache/js/'.$function.'.min.js');
-                }
+                }// TODO - Templatisï¿½ le bordel
 
 
-                // TODO - Templatisé le bordel
+            }*/
 
-                // Inclusion du header
-                ob_start();
+            Twig_Autoloader::register();
 
-                include("template/frontend/header.phtml");
-                $content_header = ob_get_contents();
+            $loader1 = new Twig_Loader_Filesystem('template/frontend');
+            $loader2 = new Twig_Loader_Array(array(
+                'module_content' => file_get_contents("modules/frontend/".$module."/view/".$function.".twig"),
+            ));
 
-                ob_end_clean();
+            $loader = new Twig_Loader_Chain(array($loader1, $loader2));
 
-                // Inclusion du sidebar
-                ob_start();
+            $twig = new Twig_Environment($loader);
+            echo $twig->render('index.twig', array(
+                'assets' => array('directory' => Core::absURL()."template/frontend/assets"),
+                'data' => $data
+            ));
 
-                include("template/frontend/sidebar.phtml");
-                $content_sidebar = ob_get_contents();
-
-                ob_end_clean();
-
-                // Inclusion du footer
-                ob_start();
-
-                include("template/frontend/footer.phtml");
-                $content_footer = ob_get_contents();
-
-                ob_end_clean();
-            }
-            else {
-                $content_header = $content_sidebar = $content_footer = NULL;
-            }
-
-            // HTML template du view module
-            ob_start();
-
-            include("modules/frontend/".$module."/view/".$function.".phtml");
-            $content_html = ob_get_contents();
-
-            ob_end_clean();
-
-
-            echo $content_header . $content_sidebar . $content_html . $content_footer;
         }
 
     }

@@ -30,6 +30,43 @@
 
     });
 
+
+    // Routes personnalis?s
+    $mod_config = parse_ini_file('modules/frontend/FrontendConfig.ini', true);
+
+
+    //die(print_r($mod_config['routes']));
+
+    foreach($mod_config['routes'] as $direction => $links) {
+
+        foreach($links as $key => $link) {
+
+            Flight::route($link, function () {
+
+                global $mod_config, $link;
+
+                $direction = Core::array_searchRecursive($link, $mod_config['routes']);
+
+                $route_personnalise = explode('.', $direction[0]);
+
+                $module = "";
+                $function = "";
+
+                if (!empty($route_personnalise[0])) {
+                    $module = $route_personnalise[0];
+                    $function = $route_personnalise[1];
+                }
+
+                $arguments = func_get_args();
+
+                FrontendEngine::start($module, $function, $arguments[count($arguments)-1]->params);
+
+            }, true);
+
+        }
+
+    }
+
     // Routage frontend
     Flight::route('(/@module(/@function(/@param)))', function($module, $function, $param) {
 
