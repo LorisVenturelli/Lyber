@@ -21,7 +21,7 @@ class Autoloader {
             $file .= implode('/', $namespace).".php";
         }
         else if($namespace[1] == "apps"){
-            $file .= "apps/".$namespace[2]."/".$namespace[3]."/controller/".$namespace[4].".php";
+            $file .= "apps/".$namespace[2]."/bundles/".$namespace[3]."/controller/".$namespace[4].".php";
         }
 
         $file = str_replace('/', DIRECTORY_SEPARATOR, $file);

@@ -1,7 +1,7 @@
 RewriteEngine On
 
 RewriteCond %{REQUEST_FILENAME} !(assets(\/)?)
-RewriteCond %{REQUEST_FILENAME} !(template/(.*)/(modele|assets)/(\/)?)
+RewriteCond %{REQUEST_FILENAME} !(apps/(.*)/assets/(\/)?)
 RewriteCond %{REQUEST_FILENAME} !(modules/(.*)/cache/(\/)?)
 
 RewriteRule ^(.*)$ index.php [QSA,L]

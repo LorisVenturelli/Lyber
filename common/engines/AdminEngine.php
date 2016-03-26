@@ -3,6 +3,7 @@
 namespace Lyber\Common\Engines;
 
 use Exception;
+use Lyber\Common\Components\Assets;
 use Lyber\Common\Components\Auth;
 use Lyber\Common\Components\Config;
 use Lyber\Common\Components\Core;
@@ -24,7 +25,7 @@ class AdminEngine
         Core::getRequest();
 
         // Module par défault
-        $module = (empty($module)) ? Config::get('global','backend_home_module') : $module;
+        $module = (empty($module)) ? Config::get('global','admin_home_module') : $module;
         // Fonction par défault
         $function = (empty($function)) ? 'show' : $function;
 
@@ -43,16 +44,16 @@ class AdminEngine
         // Définition des noms des fichiers MVC
         $moduleController = ucfirst($module)."ViewController";
 
-        if(!is_dir('apps/admin/'.$module))
+        if(!is_dir('apps/admin/bundles/'.$module))
             throw new Exception('Module '.$module.' introuvable !');
 
         // Test existance fichier config du view module
-        if(file_exists('apps/admin/'.$module.'/config/'.$function.'.ini'))
-            $config = parse_ini_file('apps/admin/'.$module.'/config/'.$function.'.ini', true);
+        if(file_exists('apps/admin/bundles/'.$module.'/config/'.$function.'.ini'))
+            $config = parse_ini_file('apps/admin/bundles/'.$module.'/config/'.$function.'.ini', true);
         else
             throw new Exception('Fichier de config '.$function.'.ini du module '.$module.' non trouvée !', 1);
 
-        $mod_config = parse_ini_file('apps/admin/BackendConfig.ini', true);
+        $mod_config = parse_ini_file('apps/admin/adminConfig.ini', true);
 
         // TODO - Faire un controller pour cet héritage de config
         // Héritage des configs modules
@@ -69,20 +70,53 @@ class AdminEngine
             $data = $moduleController::$functionAction($param);
 
 
+        // TODO - Gestionnaire de cache et minifer
+        if (!empty($config['assets']['mainCSS'])) {
+            foreach ($config['assets']['mainCSS'] as $asset)
+                Assets::addCssFile("apps/admin/assets/" . $asset);
+        }
+
+        // Assets JS
+        if (!empty($config['assets']['mainJS'])) {
+            foreach ($config['assets']['mainJS'] as $asset)
+                Assets::addJsFile("apps/admin/assets/" . $asset);
+        }
+
+        $minified = false;
+        // Gestion minifer + cache assets
+        if ($config['assets']['minifier'] == "1" || ($config['assets']['load_cache'] == "1" && !file_exists(Core::getRoot() . 'apps/admin/cache/assets/admin.min.js'))) {
+            if (!file_exists(Core::getRoot() . 'apps/admin/cache/assets'))
+                if (!mkdir(Core::getRoot() . 'apps/admin/cache/assets', 0777, true))
+                    throw new Exception('Echec lors de la cr�ation du dossier cache main JS !');
+
+            if (!file_exists(Core::getRoot() . 'apps/admin/cache/assets/admin.min.js'))
+                if (!fopen(Core::getRoot() . 'apps/admin/cache/assets/admin.min.js', 'w'))
+                    throw new Exception('Echec lors de la cr�ation du fichier cache main JS !');
+
+            if (!file_exists(Core::getRoot() . 'apps/admin/cache/assets/admin.min.css'))
+                if (!fopen(Core::getRoot() . 'apps/admin/cache/assets/admin.min.css', 'w'))
+                    throw new Exception('Echec lors de la cr�ation du fichier cache main CSS !');
+
+            Assets::saveCss(Core::getRoot() . 'apps/admin/cache/assets/admin.min.css');
+            Assets::saveJs(Core::getRoot() . 'apps/admin/cache/assets/admin.min.js');
+
+            $minified = true;
+        }
+
         Twig_Autoloader::register();
 
         // Paramètre fullpage du view module
         if(!empty($config['param']['fullpage']) && $config['param']['fullpage'] == "1")
         {
-            $loader = new Twig_Loader_Filesystem("apps/admin/".$module."/view");
+            $loader = new Twig_Loader_Filesystem("apps/admin/bundles/".$module."/view");
             $twig = new Twig_Environment($loader);
             $twig->addExtension(new Twig_Extensions_Extension_Text());
             $twig_file = $function.".twig";
         }
         else {
-            $loader1 = new Twig_Loader_Filesystem('template/admin');
+            $loader1 = new Twig_Loader_Filesystem('apps/admin/view');
             $loader2 = new Twig_Loader_Array(array(
-                'module_content' => file_get_contents("apps/admin/".$module."/view/".$function.".twig"),
+                'module_content' => file_get_contents("apps/admin/bundles/".$module."/view/".$function.".twig"),
             ));
 
             $loader = new Twig_Loader_Chain(array($loader1, $loader2));
@@ -105,7 +139,9 @@ class AdminEngine
                 'module' => $module
             ),
             'assets' => array(
-                'directory' => Core::absURL()."template/admin/assets/"
+                'directory' => Core::absURL()."apps/admin/assets/",
+                'css' => ($minified || $config['assets']['load_cache'] == "1") ? array("apps/admin/cache/assets/admin.min.css") : Assets::getCssList(),
+                'js' => ($minified || $config['assets']['load_cache'] == "1") ? array("apps/admin/cache/assets/admin.min.js") : Assets::getJsList()
             ),
             'user' => $user_instance,
             'data' => $data

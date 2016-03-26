@@ -1,3 +1,3 @@
 <?php
 
-    include_once('app/AppIndex.php');
+    include_once('common/AppIndex.php');

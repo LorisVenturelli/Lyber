@@ -1,6 +1,5 @@
-vendor/
+.idea/
 common/*.ini
 logs/
-.idea/
-template/admin/modele/
-template/frontend/modele/
+apps/*/cache/
+vendor/

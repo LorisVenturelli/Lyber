@@ -9,11 +9,11 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "swiftmailer/swiftmailer": "5.3.*@dev",
-        "filp/whoops": "^1.1",
-        "monolog/monolog": "1.12.*@dev",
-        "matthiasmullie/minify": "~1.3",
-        "twig/twig": "~1.0",
+        "swiftmailer/swiftmailer": "^5.4",
+        "filp/whoops": "^2.1",
+        "monolog/monolog": "^1.18",
+        "matthiasmullie/minify": "^1.3",
+        "twig/twig": "^1.24",
         "twig/extensions": "^1.3",
         "archwisp/php-encrypt-data": "^1.0",
         "mikecao/flight": "^1.2"
