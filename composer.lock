@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0867970ceb3804f976d70cca32516481",
-    "content-hash": "cdbd58ec865a541f4fdef86546d711c9",
+    "hash": "983ba35df328629ad70c744549811883",
+    "content-hash": "c35b3e82317391b021d55a4a999b5a02",
     "packages": [
         {
             "name": "archwisp/php-encrypt-data",
@@ -217,16 +217,16 @@
         },
         {
             "name": "mikecao/flight",
-            "version": "dev-master",
+            "version": "v1.2.20",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikecao/flight.git",
-                "reference": "8bd0bdd0b67166d04e03f76b1194e6c6e73bb8bc"
+                "reference": "f3fa0513fe2e1994923793b85c593b7f2b644001"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikecao/flight/zipball/8bd0bdd0b67166d04e03f76b1194e6c6e73bb8bc",
-                "reference": "8bd0bdd0b67166d04e03f76b1194e6c6e73bb8bc",
+                "url": "https://api.github.com/repos/mikecao/flight/zipball/f3fa0513fe2e1994923793b85c593b7f2b644001",
+                "reference": "f3fa0513fe2e1994923793b85c593b7f2b644001",
                 "shasum": ""
             },
             "require": {
@@ -256,7 +256,7 @@
             ],
             "description": "Flight is a fast, simple, extensible framework for PHP. Flight enables you to quickly and easily build RESTful web applications.",
             "homepage": "http://flightphp.com",
-            "time": "2016-03-03 17:25:44"
+            "time": "2016-02-29 08:38:10"
         },
         {
             "name": "monolog/monolog",
@@ -367,50 +367,6 @@
                 "psr-3"
             ],
             "time": "2012-12-21 11:40:51"
-        },
-        {
-            "name": "simple-crud/simple-crud",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/oscarotero/simple-crud.git",
-                "reference": "9817c88da5a78897ec99614e91561da817f91f4b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/oscarotero/simple-crud/zipball/9817c88da5a78897ec99614e91561da817f91f4b",
-                "reference": "9817c88da5a78897ec99614e91561da817f91f4b",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "SimpleCrud\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Oscar Otero",
-                    "email": "oom@oscarotero.com",
-                    "homepage": "http://oscarotero.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Create/Read/Update/Delete easily",
-            "homepage": "https://github.com/oscarotero/simple-crud",
-            "keywords": [
-                "crud",
-                "mysql",
-                "sqlite"
-            ],
-            "time": "2016-03-24 10:05:10"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -583,9 +539,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "swiftmailer/swiftmailer": 20,
-        "mikecao/flight": 20,
-        "monolog/monolog": 20,
-        "simple-crud/simple-crud": 20
+        "monolog/monolog": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

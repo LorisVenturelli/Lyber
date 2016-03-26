@@ -1,6 +1,6 @@
-app/*.ini
+vendor/
+common/*.ini
 logs/
 .idea/
-vendor/**/.git
-template/backend/modele
-template/frontend/modele
+template/admin/modele/
+template/frontend/modele/
