@@ -35,12 +35,12 @@ class FrontendEngine {
         // D�finition des noms des fichiers MVC
         $moduleController = ucfirst($module) . "ViewController";
 
-        if (!is_dir('apps/frontend/' . $module))
+        if (!is_dir('apps/frontend/bundles/' . $module))
             throw new Exception('Module ' . $module . ' introuvable !');
 
         // Test existance fichier config du view module
-        if (file_exists('apps/frontend/' . $module . '/config/' . $function . '.ini'))
-            $config = parse_ini_file('apps/frontend/' . $module . '/config/' . $function . '.ini', true);
+        if (file_exists('apps/frontend/bundles/' . $module . '/config/' . $function . '.ini'))
+            $config = parse_ini_file('apps/frontend/bundles/' . $module . '/config/' . $function . '.ini', true);
         else
             throw new Exception('Fichier de config ' . $function . '.ini du module ' . $module . ' non trouv�e !', 1);
 
@@ -62,41 +62,41 @@ class FrontendEngine {
         // TODO - Gestionnaire de cache et minifer
         if (!empty($config['assets']['mainCSS'])) {
             foreach ($config['assets']['mainCSS'] as $asset)
-                Assets::addCssFile("template/frontend/assets/" . $asset);
+                Assets::addCssFile("apps/frontend/assets/" . $asset);
         }
 
         // Assets JS
         if (!empty($config['assets']['mainJS'])) {
             foreach ($config['assets']['mainJS'] as $asset)
-                Assets::addJsFile("template/frontend/assets/" . $asset);
+                Assets::addJsFile("apps/frontend/assets/" . $asset);
         }
 
         $minified = false;
         // Gestion minifer + cache assets
-        if ($config['assets']['minifier'] == "1" || ($config['assets']['load_cache'] == "1" && !file_exists(Core::getRoot() . 'cache/assets/frontend.min.js'))) {
-            if (!file_exists(Core::getRoot() . 'cache/assets'))
-                if (!mkdir(Core::getRoot() . 'cache/assets', 0777, true))
+        if ($config['assets']['minifier'] == "1" || ($config['assets']['load_cache'] == "1" && !file_exists(Core::getRoot() . 'apps/frontend/cache/assets/frontend.min.js'))) {
+            if (!file_exists(Core::getRoot() . 'apps/frontend/cache/assets'))
+                if (!mkdir(Core::getRoot() . 'apps/frontend/cache/assets', 0777, true))
                     throw new Exception('Echec lors de la cr�ation du dossier cache main JS !');
 
-            if (!file_exists(Core::getRoot() . 'cache/assets/frontend.min.js'))
-                if (!fopen(Core::getRoot() . 'cache/assets/frontend.min.js', 'w'))
+            if (!file_exists(Core::getRoot() . 'apps/frontend/cache/assets/frontend.min.js'))
+                if (!fopen(Core::getRoot() . 'apps/frontend/cache/assets/frontend.min.js', 'w'))
                     throw new Exception('Echec lors de la cr�ation du fichier cache main JS !');
 
-            if (!file_exists(Core::getRoot() . 'cache/assets/frontend.min.css'))
-                if (!fopen(Core::getRoot() . 'cache/assets/frontend.min.css', 'w'))
+            if (!file_exists(Core::getRoot() . 'apps/frontend/cache/assets/frontend.min.css'))
+                if (!fopen(Core::getRoot() . 'apps/frontend/cache/assets/frontend.min.css', 'w'))
                     throw new Exception('Echec lors de la cr�ation du fichier cache main CSS !');
 
-            Assets::saveCss(Core::getRoot() . 'cache/assets/frontend.min.css');
-            Assets::saveJs(Core::getRoot() . 'cache/assets/frontend.min.js');
+            Assets::saveCss(Core::getRoot() . 'apps/frontend/cache/assets/frontend.min.css');
+            Assets::saveJs(Core::getRoot() . 'apps/frontend/cache/assets/frontend.min.js');
 
             $minified = true;
         }
 
         Twig_Autoloader::register();
 
-        $loader1 = new Twig_Loader_Filesystem('template/frontend');
+        $loader1 = new Twig_Loader_Filesystem('apps/frontend/view');
         $loader2 = new Twig_Loader_Array(array(
-            'module_content' => file_get_contents("apps/frontend/" . $module . "/view/" . $function . ".twig"),
+            'module_content' => file_get_contents("apps/frontend/bundles/" . $module . "/view/" . $function . ".twig"),
         ));
         
         $loader = new Twig_Loader_Chain(array($loader1, $loader2));
@@ -113,9 +113,9 @@ class FrontendEngine {
             'assets' => array(
                 'load_cache' => ($config['assets']['load_cache'] == "1"),
                 'minifer' => ($config['assets']['minifier'] == "1"),
-                'directory' => Core::absURL() . "template/frontend/assets/",
-                'css' => ($minified || $config['assets']['load_cache'] == "1") ? array("cache/assets/frontend.min.css") : Assets::getCssList(),
-                'js' => ($minified || $config['assets']['load_cache'] == "1") ? array("cache/assets/frontend.min.js") : Assets::getJsList()
+                'directory' => Core::absURL() . "apps/frontend/assets/",
+                'css' => ($minified || $config['assets']['load_cache'] == "1") ? array("apps/frontend/cache/assets/frontend.min.css") : Assets::getCssList(),
+                'js' => ($minified || $config['assets']['load_cache'] == "1") ? array("apps/frontend/cache/assets/frontend.min.js") : Assets::getJsList()
             ),
             'data' => $data
         ));

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "983ba35df328629ad70c744549811883",
-    "content-hash": "c35b3e82317391b021d55a4a999b5a02",
+    "hash": "2304d47e86850ba23960b9ece4ee8288",
+    "content-hash": "0357ecd4f8de5799614744c115b72b6f",
     "packages": [
         {
             "name": "archwisp/php-encrypt-data",
@@ -53,37 +53,40 @@
         },
         {
             "name": "filp/whoops",
-            "version": "1.1.10",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filp/whoops.git",
-                "reference": "72538eeb70bbfb11964412a3d098d109efd012f7"
+                "reference": "8da9523f07c62d56fe1cf36f8ae29b333afc181f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filp/whoops/zipball/72538eeb70bbfb11964412a3d098d109efd012f7",
-                "reference": "72538eeb70bbfb11964412a3d098d109efd012f7",
+                "url": "https://api.github.com/repos/filp/whoops/zipball/8da9523f07c62d56fe1cf36f8ae29b333afc181f",
+                "reference": "8da9523f07c62d56fe1cf36f8ae29b333afc181f",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": ">=5.5.9"
             },
             "require-dev": {
-                "mockery/mockery": "0.9.*"
+                "mockery/mockery": "0.9.*",
+                "phpunit/phpunit": "^4.8 || ^5.0",
+                "symfony/var-dumper": "~3.0"
+            },
+            "suggest": {
+                "symfony/var-dumper": "Pretty print complex values better with var-dumper available",
+                "whoops/soap": "Formats errors as SOAP responses"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.2-dev"
+                    "dev-master": "2.0-dev"
                 }
             },
             "autoload": {
-                "psr-0": {
-                    "Whoops": "src/"
-                },
-                "classmap": [
-                    "src/deprecated"
-                ]
+                "psr-4": {
+                    "Whoops\\": "src/Whoops/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -103,11 +106,10 @@
                 "exception",
                 "handling",
                 "library",
-                "silex-provider",
                 "whoops",
                 "zf2"
             ],
-            "time": "2015-06-29 05:42:04"
+            "time": "2016-03-13 10:22:39"
         },
         {
             "name": "matthiasmullie/minify",
@@ -260,16 +262,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "1.12.0",
+            "version": "1.18.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "1fbe8c2641f2b163addf49cc5e18f144bec6b19f"
+                "reference": "a5f2734e8c16f3aa21b3da09715d10e15b4d2d45"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/1fbe8c2641f2b163addf49cc5e18f144bec6b19f",
-                "reference": "1fbe8c2641f2b163addf49cc5e18f144bec6b19f",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/a5f2734e8c16f3aa21b3da09715d10e15b4d2d45",
+                "reference": "a5f2734e8c16f3aa21b3da09715d10e15b4d2d45",
                 "shasum": ""
             },
             "require": {
@@ -280,12 +282,16 @@
                 "psr/log-implementation": "1.0.0"
             },
             "require-dev": {
-                "aws/aws-sdk-php": "~2.4, >2.4.8",
+                "aws/aws-sdk-php": "^2.4.9",
                 "doctrine/couchdb": "~1.0@dev",
                 "graylog2/gelf-php": "~1.0",
-                "phpunit/phpunit": "~4.0",
-                "raven/raven": "~0.5",
-                "ruflin/elastica": "0.90.*",
+                "jakub-onderka/php-parallel-lint": "0.9",
+                "php-console/php-console": "^3.1.3",
+                "phpunit/phpunit": "~4.5",
+                "phpunit/phpunit-mock-objects": "2.3.0",
+                "raven/raven": "^0.13",
+                "ruflin/elastica": ">=0.90 <3.0",
+                "swiftmailer/swiftmailer": "~5.3",
                 "videlalvaro/php-amqplib": "~2.4"
             },
             "suggest": {
@@ -294,6 +300,8 @@
                 "ext-amqp": "Allow sending log messages to an AMQP server (1.0+ required)",
                 "ext-mongo": "Allow sending log messages to a MongoDB server",
                 "graylog2/gelf-php": "Allow sending log messages to a GrayLog2 server",
+                "mongodb/mongodb": "Allow sending log messages to a MongoDB server via PHP Driver",
+                "php-console/php-console": "Allow sending log messages to Google Chrome",
                 "raven/raven": "Allow sending log messages to a Sentry server",
                 "rollbar/rollbar": "Allow sending log messages to Rollbar",
                 "ruflin/elastica": "Allow sending log messages to an Elastic Search server",
@@ -302,7 +310,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.12.x-dev"
+                    "dev-master": "2.0.x-dev"
                 }
             },
             "autoload": {
@@ -328,7 +336,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2014-12-29 21:29:35"
+            "time": "2016-03-13 16:08:35"
         },
         {
             "name": "psr/log",
@@ -370,28 +378,28 @@
         },
         {
             "name": "swiftmailer/swiftmailer",
-            "version": "v5.3.1",
+            "version": "v5.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/swiftmailer/swiftmailer.git",
-                "reference": "c5f963e7f9d6f6438fda4f22d5cc2db296ec621a"
+                "reference": "0697e6aa65c83edf97bb0f23d8763f94e3f11421"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/c5f963e7f9d6f6438fda4f22d5cc2db296ec621a",
-                "reference": "c5f963e7f9d6f6438fda4f22d5cc2db296ec621a",
+                "url": "https://api.github.com/repos/swiftmailer/swiftmailer/zipball/0697e6aa65c83edf97bb0f23d8763f94e3f11421",
+                "reference": "0697e6aa65c83edf97bb0f23d8763f94e3f11421",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
             "require-dev": {
-                "mockery/mockery": "~0.9.1"
+                "mockery/mockery": "~0.9.1,<0.9.4"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.3-dev"
+                    "dev-master": "5.4-dev"
                 }
             },
             "autoload": {
@@ -415,10 +423,11 @@
             "description": "Swiftmailer, free feature-rich PHP mailer",
             "homepage": "http://swiftmailer.org",
             "keywords": [
+                "email",
                 "mail",
                 "mailer"
             ],
-            "time": "2014-12-05 14:17:14"
+            "time": "2015-06-06 14:19:39"
         },
         {
             "name": "twig/extensions",
@@ -537,10 +546,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "swiftmailer/swiftmailer": 20,
-        "monolog/monolog": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
