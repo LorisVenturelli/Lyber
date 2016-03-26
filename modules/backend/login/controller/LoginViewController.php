@@ -5,38 +5,77 @@
 
 		public static function showAction($param)
 		{
-			return array();
-		}
 
+			Auth::register('venturelli.loris@gmail.com', 'jngj456', 'Loris', 'Venturelli');
 
-        public static function APIConnectAppAction()
-		{
-			GLOBAL $_DATABASE;
+			$email = Core::getParam('email','','post');
+			$password = Core::getParam('password','','post');
 
-			$data = Core::getParams('post');
+			$return = array();
+			$authentification = false;
 
-			try {
-				
-				Core::require_data([
-					$data['login'] => ['notempty','string'],
-					$data['password'] => ['notempty','string']
-				]);
+			if(!empty($email) && !empty($password)){
 
-				$user = LoginModel::getOneByEmail($data['login']);
+				try {
 
-				error_log(print_r($user,true));
+					$authentification = Auth::login($email, $password);
 
-				if(empty($user['password']) || ($user['password'] != md5($data['password']))) {
-					throw new Exception("Login ou password incorrect.", 1);
+					if($authentification || Auth::isLogged() !== false){
+						Core::redirect(Core::absURL()."admin");
+						exit;
+					}
+
+				}
+				catch(Exception $e) {
+					$return['error'] = $e->getMessage();
 				}
 
-			} catch (Exception $e) {
-
-				return Core::json(array(), false, $e->getMessage());
-				
 			}
 
-			return Core::json(array(), true, 'Connexion avec succès.');
+			return $return;
 		}
-		
+
+		public static function disconnectAction($param){
+
+			Auth::logout();
+
+			Core::redirect(Core::absURL().'admin');
+
+			return array();
+
+		}
+
+		public static function lockAction($param){
+
+			if(Auth::lock() === false){
+				Core::redirect(Core::absURL()."admin/login");
+			}
+
+			$password = Core::getParam('password','','post');
+
+			$return = array();
+			$authentification = false;
+
+			if(!empty($password)){
+
+				try {
+
+					$authentification = Auth::login(User::getInstance()->email, $password);
+
+					if($authentification || Auth::isLogged() !== false){
+						Core::redirect(Core::absURL()."admin");
+						exit;
+					}
+
+				}
+				catch(Exception $e) {
+					$return['error'] = $e->getMessage();
+				}
+
+			}
+
+			return $return;
+
+		}
+
 	}

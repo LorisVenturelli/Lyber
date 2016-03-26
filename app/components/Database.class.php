@@ -230,7 +230,7 @@ class Database
 	* @param  string $message
 	* @return string
 	*/
-	private function ExceptionLog($message)
+	private static function ExceptionLog($message)
 	{
 		Log::addError($message);
 	}
