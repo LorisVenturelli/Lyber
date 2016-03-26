@@ -1,4 +1,4 @@
-
+app/*.ini
 logs/
 .idea/
 vendor/**/.git

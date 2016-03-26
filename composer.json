@@ -15,7 +15,9 @@
         "monolog/monolog": "1.12.*@dev",
         "simple-crud/simple-crud": "dev-master",
         "matthiasmullie/minify": "~1.3",
-        "twig/twig": "~1.0"
+        "twig/twig": "~1.0",
+        "twig/extensions": "^1.3",
+        "archwisp/php-encrypt-data": "^1.0"
     },
     "autoload": {
         "classmap": [ 

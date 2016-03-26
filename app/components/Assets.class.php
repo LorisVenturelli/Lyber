@@ -9,10 +9,10 @@
 
         public static function addJsFile($pathFile)
         {
-            if(!file_exists($pathFile))
+            if(!file_exists(Core::getRoot().$pathFile))
                 throw new Exception('Fichier inexistant ! : '.$pathFile);
 
-            if(!in_array(pathinfo($pathFile, PATHINFO_EXTENSION), array('js')))
+            if(!in_array(pathinfo(Core::getRoot().$pathFile, PATHINFO_EXTENSION), array('js')))
                 throw new Exception('This file is not a JS file ! : '.$pathFile);
 
             self::$js[] = $pathFile;
@@ -20,10 +20,10 @@
 
         public static function addCssFile($pathFile)
         {
-            if(!file_exists($pathFile))
+            if(!file_exists(Core::getRoot().$pathFile))
                 throw new Exception('Fichier inexistant ! : '.$pathFile);
 
-            if(!in_array(pathinfo($pathFile, PATHINFO_EXTENSION), array('css')))
+            if(!in_array(pathinfo(Core::getRoot().$pathFile, PATHINFO_EXTENSION), array('css')))
                 throw new Exception('This file is not a CSS file ! : '.$pathFile);
 
             self::$css[] = $pathFile;
@@ -50,7 +50,7 @@
             $min = new Minify\JS();
 
             foreach(self::$js as $asset)
-                $min->add($asset);
+                $min->add(Core::getRoot().$asset);
 
             $min->minify($path);
         }
@@ -60,7 +60,7 @@
             $min = new Minify\CSS();
 
             foreach(self::$css as $asset)
-                $min->add($asset);
+                $min->add(Core::getRoot().$asset);
 
             $min->minify($path);
         }

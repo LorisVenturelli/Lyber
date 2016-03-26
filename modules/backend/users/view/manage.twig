@@ -1,0 +1,94 @@
+<!-- BEGIN PAGE CONTAINER-->
+<div class="page-content">
+    <div class="content">
+        <ul class="breadcrumb">
+            <li>
+                <p>Accueil</p>
+            </li>
+            <li>
+                <a href="{{ app.abs_url }}users">Tous les utilisateurs</a>
+            </li>
+            <li>
+                {% if data.user.id_user is empty %}
+                    Nouvel utilisateur
+                {% else %}
+                    <a href="{{ app.abs_url }}users/edit/{{ data.user.id_user }}" class="active">{{ data.user.firstname }} {{ data.user.lastname }}</a>
+                {% endif %}
+            </li>
+        </ul>
+        <div class="page-title">
+            <a href="{{ app.abs_url }}users"><i class="icon-custom-left"></i></a>
+            <h3>{% if data.user.id_user is empty %}Nouvel utilisateur{% else %}Edition de <span class="semi-bold">{{ data.user.firstname }} {{ data.user.lastname }}</span>{% endif %}</h3>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="grid simple">
+                    <div class="grid-body no-border"><br>
+
+                        {% for success in data.alert.success %}
+                        <div class="alert alert-success">
+                            <button class="close" data-dismiss="alert"></button>
+                            <i class="fa fa-check"></i>
+                            {{ success }}
+                        </div>
+                        {% endfor %}
+
+                        {% for error in data.alert.error %}
+                        <div class="alert alert-error">
+                            <button class="close" data-dismiss="alert"></button>
+                            <i class="fa fa-warning"></i>
+                            {{ error }}
+                        </div>
+                        {% endfor %}
+
+                        <form action="{{ app.abs_url }}users/manage/{{ data.user.id_user }}" method="POST" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label class="form-label">Prénom</label>
+                                <span class="help"></span>
+                                <div class="input-with-icon right">
+                                    <input type="text" name="firstname" id="" class="form-control" value="{{ data.user.firstname }}" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Nom</label>
+                                <span class="help"></span>
+                                <div class="input-with-icon right">
+                                    <input type="text" name="lastname" id="" class="form-control" value="{{ data.user.lastname }}" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <span class="help"></span>
+                                <div class="input-with-icon right">
+                                    <input type="text" name="email" id="" class="form-control" value="{{ data.user.email }}" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Mot de passe</label>
+                                <span class="help"></span>
+                                <div class="input-with-icon right">
+                                    <input type="password" name="password" id="" class="form-control" value="">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Confirmation mot de passe</label>
+                                <span class="help"></span>
+                                <div class="input-with-icon right">
+                                    <input type="password" name="repassword" id="" class="form-control" value="">
+                                </div>
+                            </div>
+                            <div class="form-actions">
+                                <div class="pull-right">
+                                    <button type="submit" class="btn btn-primary btn-cons"><i class="fa fa-check"></i> Enregistrer</button>
+                                    <button type="button" class="btn btn-white btn-cons">Annuler</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTAINER -->

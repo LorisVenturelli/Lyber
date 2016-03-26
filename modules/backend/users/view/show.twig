@@ -1,0 +1,70 @@
+<!-- BEGIN PAGE CONTAINER-->
+<div class="page-content">
+    <div class="content">
+        <ul class="breadcrumb">
+            <li>
+                <p>Accueil</p>
+            </li>
+            <li>
+                <a href="#" class="active">Utilisateurs</a>
+            </li>
+        </ul>
+        <div class="page-title">
+            <h3>Liste des <span class="semi-bold">utilisateurs</span></h3>
+        </div>
+
+        {% if data.alert.success is not empty %}
+            <div class="alert alert-success">
+                <button class="close" data-dismiss="alert"></button>
+                <i class="fa fa-check"></i>
+                {{ data.alert.success }}
+            </div>
+        {% endif %}
+
+        <div class="text-right">
+            <a href="{{ app.abs_url }}users/manage" class="btn btn-info btn-cons btn-large">
+                <i class="fa fa-plus"></i> Nouveau utilisateur
+            </a>
+        </div>
+
+        <div class="row-fluid">
+            <div class="span12">
+                <div class="grid simple">
+                    <div class="grid-body">
+                        <table class="table table-striped" id="example3">
+                            <thead>
+                                <tr>
+                                    <th>Prénom</th>
+                                    <th>Nom</th>
+                                    <th>Email</th>
+                                    <th>Création</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for testimonial in data.users %}
+                                <tr>
+                                    <td class="bold">{{ testimonial.firstname }}</td>
+                                    <td>{{ testimonial.lastname }}</td>
+                                    <td>{{ testimonial.email }}</td>
+                                    <td>{{ testimonial.date_create | date('d-m-Y') }}</td>
+                                    <td>
+                                        <div class="btn-group">
+                                            <a href="{{ app.abs_url }}users/manage/{{ testimonial.id_user }}" class="btn btn-small btn-info btn-demo-space">Editer</a>
+                                            <button class="btn btn-small btn-info dropdown-toggle btn-demo-space" data-toggle="dropdown"> <span class="caret"></span> </button>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="{{ app.abs_url }}users/delete/{{ testimonial.id_user }}">Supprimer</a></li>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PAGE CONTAINER -->

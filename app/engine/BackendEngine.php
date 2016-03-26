@@ -5,12 +5,22 @@
 
         public static function start($module, $function, $param)
         {
+
             Core::getRequest();
 
             // Module par défault
             $module = (empty($module)) ? Config::get('global','backend_home_module') : $module;
             // Fonction par défault
             $function = (empty($function)) ? 'show' : $function;
+
+            if(Auth::isLocked() === true && $module != "login" && $function != "lock"){
+                Core::redirect(Core::absURL().'admin/login/lock');
+                exit;
+            }
+            else if(Auth::isLogged() === false && $module != "login"){
+                Core::redirect(Core::absURL().'admin/login');
+                exit;
+            }
 
             //Préfixe _ & Suffixe Action
             $functionAction = (is_numeric($function) ? "_".$function : $function)."Action";
@@ -47,69 +57,46 @@
             else
                 $data = $moduleController::$functionAction($param);
 
-            // Paramètre fullpage du view module
-            if($config['param']['fullpage'] == "0")
-            {
-                // TODO - Gestionnaire de cache et minifer
-                // Assets CSS
-                if(!empty($config['assets']['css'])){
-                    foreach($config['assets']['css'] as $asset)
-                        Assets::addCssFile($asset);
-                }
-
-                if(!empty($config['assets']['mainCSS'])) {
-                    foreach ($config['assets']['mainCSS'] as $asset)
-                        Assets::addCssFile($asset);
-                }
-
-                // Assets JS
-                if(!empty($config['assets']['mainJS'])) {
-                    foreach ($config['assets']['mainJS'] as $asset)
-                        Assets::addJsFile($asset);
-                }
-
-                if(!empty($config['assets']['js'])){
-                    foreach($config['assets']['js'] as $asset)
-                        Assets::addJsFile($asset);
-                }
-
-                if(Config::get('global','assets_minifer') == 1) {
-
-                    if(!file_exists(Core::getRoot().'modules/backend/'.$module.'/cache/js'))
-                        if(!mkdir(Core::getRoot().'modules/backend/'.$module.'/cache/js', 0777, true))
-                            throw new Exception('Echec lors de la création du dossier cache JS !');
-
-                    if(!file_exists(Core::getRoot().'modules/backend/'.$module.'/cache/js/'.$function.'.min.js'))
-                        if(!fopen(Core::getRoot().'modules/backend/'.$module.'/cache/js/'.$function.'.min.js','w'))
-                            throw new Exception('Echec lors de la création du fichier cache JS !');
-
-                    if(!file_exists(Core::getRoot().'modules/backend/'.$module.'/cache/css'))
-                        if(!mkdir(Core::getRoot().'modules/backend/'.$module.'/cache/css', 0777, true))
-                            throw new Exception('Echec lors de la création du dossier cache CSS !');
-
-                    if(!file_exists(Core::getRoot().'modules/backend/'.$module.'/cache/js/'.$function.'.min.css'))
-                        if(!fopen(Core::getRoot().'modules/backend/'.$module.'/cache/js/'.$function.'.min.css','w'))
-                            throw new Exception('Echec lors de la création du fichier cache CSS !');
-
-                    Assets::saveCss(Core::getRoot().'modules/backend/'.$module.'/cache/css/'.$function.'.min.css');
-                    Assets::saveJs(Core::getRoot().'modules/backend/'.$module.'/cache/js/'.$function.'.min.js');
-                }
-
-            }
 
             Twig_Autoloader::register();
 
-            $loader1 = new Twig_Loader_Filesystem('template/backend');
-            $loader2 = new Twig_Loader_Array(array(
-                'module_content' => file_get_contents("modules/backend/".$module."/view/".$function.".twig"),
-            ));
+            // Paramètre fullpage du view module
+            if(!empty($config['param']['fullpage']) && $config['param']['fullpage'] == "1")
+            {
+                $loader = new Twig_Loader_Filesystem("modules/backend/".$module."/view");
+                $twig = new Twig_Environment($loader);
+                $twig->addExtension(new Twig_Extensions_Extension_Text());
+                $twig_file = $function.".twig";
+            }
+            else {
+                $loader1 = new Twig_Loader_Filesystem('template/backend');
+                $loader2 = new Twig_Loader_Array(array(
+                    'module_content' => file_get_contents("modules/backend/".$module."/view/".$function.".twig"),
+                ));
 
-            $loader = new Twig_Loader_Chain(array($loader1, $loader2));
+                $loader = new Twig_Loader_Chain(array($loader1, $loader2));
+                $twig = new Twig_Environment($loader);
+                $twig->addExtension(new Twig_Extensions_Extension_Text());
+                $twig_file = "index.twig";
+            }
 
-            $twig = new Twig_Environment($loader);
-            echo $twig->render('index.twig', array(
-                'app' => array('abs_url' => Core::absURL()."admin"),
-                'assets' => array('directory' => Core::absURL()."template/backend/assets"),
+            $user_instance = array(
+                'id_user' => (User::getInstance() !== null) ? User::getInstance()->id_user : "",
+                'firstname' => (User::getInstance() !== null) ? User::getInstance()->firstname : "",
+                'lastname' => (User::getInstance() !== null) ? User::getInstance()->lastname : "",
+                'email' => (User::getInstance() !== null) ? User::getInstance()->email : "",
+            );
+
+            echo $twig->render($twig_file, array(
+                'app' => array(
+                    'abs_url' => Core::absURL()."admin/",
+                    'frontend_url' => Core::absURL(),
+                    'module' => $module
+                ),
+                'assets' => array(
+                    'directory' => Core::absURL()."template/backend/assets/"
+                ),
+                'user' => $user_instance,
                 'data' => $data
             ));
 

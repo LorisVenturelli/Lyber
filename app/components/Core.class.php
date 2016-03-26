@@ -136,7 +136,7 @@ class Core {
             }
         }
 
-        $_REQUEST = $_POST = $_GET = $_COOKIE = null;
+        $_REQUEST = $_POST = $_GET = null;
     }
 
     public static function require_data($data){

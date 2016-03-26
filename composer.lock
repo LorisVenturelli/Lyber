@@ -4,11 +4,56 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "75a7b8a1819af13e108ffc66ccf22cb8",
+    "hash": "0867970ceb3804f976d70cca32516481",
+    "content-hash": "cdbd58ec865a541f4fdef86546d711c9",
     "packages": [
         {
+            "name": "archwisp/php-encrypt-data",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/archwisp/PHPEncryptData.git",
+                "reference": "93ec74b8d944f5bdf0c5a870abf1444008a4e756"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/archwisp/PHPEncryptData/zipball/93ec74b8d944f5bdf0c5a870abf1444008a4e756",
+                "reference": "93ec74b8d944f5bdf0c5a870abf1444008a4e756",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mcrypt": "*"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~3.7"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    ""
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bryan C. Geraghty",
+                    "email": "bryan@ravensight.org"
+                }
+            ],
+            "description": "Simple Data Encryption Library For PHP 5.3+",
+            "time": "2014-06-01 01:00:02"
+        },
+        {
             "name": "filp/whoops",
-            "version": "1.1.7",
+            "version": "1.1.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filp/whoops.git",
@@ -66,16 +111,16 @@
         },
         {
             "name": "matthiasmullie/minify",
-            "version": "1.3.28",
+            "version": "1.3.34",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthiasmullie/minify.git",
-                "reference": "2cee2544198d97bca4ba094bc2df27d6458da1af"
+                "reference": "272e46113404f66ced256659552a0cc074a7810f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthiasmullie/minify/zipball/2cee2544198d97bca4ba094bc2df27d6458da1af",
-                "reference": "2cee2544198d97bca4ba094bc2df27d6458da1af",
+                "url": "https://api.github.com/repos/matthiasmullie/minify/zipball/272e46113404f66ced256659552a0cc074a7810f",
+                "reference": "272e46113404f66ced256659552a0cc074a7810f",
                 "shasum": ""
             },
             "require": {
@@ -84,9 +129,8 @@
                 "php": ">=5.3.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "4.3.*",
-                "satooshi/php-coveralls": "dev-master",
-                "scrapbook/psr-cache": "~0.2"
+                "matthiasmullie/scrapbook": "~1.0",
+                "phpunit/phpunit": "~4.8"
             },
             "bin": [
                 "bin/minifycss",
@@ -119,20 +163,20 @@
                 "minifier",
                 "minify"
             ],
-            "time": "2015-08-20 14:49:37"
+            "time": "2016-03-01 08:00:27"
         },
         {
             "name": "matthiasmullie/path-converter",
-            "version": "1.0.5",
+            "version": "1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/matthiasmullie/path-converter.git",
-                "reference": "b1e31c51e8c207ad6114f5b4ac4e652bc936c380"
+                "reference": "83609c1bb251b2540eba912615571a501a0a06a6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/matthiasmullie/path-converter/zipball/b1e31c51e8c207ad6114f5b4ac4e652bc936c380",
-                "reference": "b1e31c51e8c207ad6114f5b4ac4e652bc936c380",
+                "url": "https://api.github.com/repos/matthiasmullie/path-converter/zipball/83609c1bb251b2540eba912615571a501a0a06a6",
+                "reference": "83609c1bb251b2540eba912615571a501a0a06a6",
                 "shasum": ""
             },
             "require": {
@@ -140,8 +184,8 @@
                 "php": ">=5.3.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "4.3.*",
-                "satooshi/php-coveralls": "dev-master"
+                "phpunit/phpunit": "~4.8",
+                "satooshi/php-coveralls": "~1.0"
             },
             "type": "library",
             "autoload": {
@@ -169,7 +213,7 @@
                 "paths",
                 "relative"
             ],
-            "time": "2015-06-01 15:20:30"
+            "time": "2016-01-07 00:41:13"
         },
         {
             "name": "mikecao/flight",
@@ -177,12 +221,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/mikecao/flight.git",
-                "reference": "4bb1b49385af656c1246f51db236e834b827aef6"
+                "reference": "8bd0bdd0b67166d04e03f76b1194e6c6e73bb8bc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mikecao/flight/zipball/4bb1b49385af656c1246f51db236e834b827aef6",
-                "reference": "4bb1b49385af656c1246f51db236e834b827aef6",
+                "url": "https://api.github.com/repos/mikecao/flight/zipball/8bd0bdd0b67166d04e03f76b1194e6c6e73bb8bc",
+                "reference": "8bd0bdd0b67166d04e03f76b1194e6c6e73bb8bc",
                 "shasum": ""
             },
             "require": {
@@ -212,7 +256,7 @@
             ],
             "description": "Flight is a fast, simple, extensible framework for PHP. Flight enables you to quickly and easily build RESTful web applications.",
             "homepage": "http://flightphp.com",
-            "time": "2015-06-23 04:56:51"
+            "time": "2016-03-03 17:25:44"
         },
         {
             "name": "monolog/monolog",
@@ -330,12 +374,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/oscarotero/simple-crud.git",
-                "reference": "4acbe682a3ada3fff0e74eb45f19aa0b82e529e7"
+                "reference": "9817c88da5a78897ec99614e91561da817f91f4b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oscarotero/simple-crud/zipball/4acbe682a3ada3fff0e74eb45f19aa0b82e529e7",
-                "reference": "4acbe682a3ada3fff0e74eb45f19aa0b82e529e7",
+                "url": "https://api.github.com/repos/oscarotero/simple-crud/zipball/9817c88da5a78897ec99614e91561da817f91f4b",
+                "reference": "9817c88da5a78897ec99614e91561da817f91f4b",
                 "shasum": ""
             },
             "require": {
@@ -366,7 +410,7 @@
                 "mysql",
                 "sqlite"
             ],
-            "time": "2015-08-06 17:54:04"
+            "time": "2016-03-24 10:05:10"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -421,17 +465,69 @@
             "time": "2014-12-05 14:17:14"
         },
         {
-            "name": "twig/twig",
-            "version": "v1.21.1",
+            "name": "twig/extensions",
+            "version": "v1.3.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/twigphp/Twig.git",
-                "reference": "ca8d3aa90b6a01c82e07909fe815d6b443e75a23"
+                "url": "https://github.com/twigphp/Twig-extensions.git",
+                "reference": "449e3c8a9ffad7c2479c7864557275a32b037499"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/ca8d3aa90b6a01c82e07909fe815d6b443e75a23",
-                "reference": "ca8d3aa90b6a01c82e07909fe815d6b443e75a23",
+                "url": "https://api.github.com/repos/twigphp/Twig-extensions/zipball/449e3c8a9ffad7c2479c7864557275a32b037499",
+                "reference": "449e3c8a9ffad7c2479c7864557275a32b037499",
+                "shasum": ""
+            },
+            "require": {
+                "twig/twig": "~1.20|~2.0"
+            },
+            "require-dev": {
+                "symfony/translation": "~2.3"
+            },
+            "suggest": {
+                "symfony/translation": "Allow the time_diff output to be translated"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Twig_Extensions_": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                }
+            ],
+            "description": "Common additional features for Twig that do not directly belong in core",
+            "homepage": "http://twig.sensiolabs.org/doc/extensions/index.html",
+            "keywords": [
+                "i18n",
+                "text"
+            ],
+            "time": "2015-08-22 16:38:35"
+        },
+        {
+            "name": "twig/twig",
+            "version": "v1.24.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/twigphp/Twig.git",
+                "reference": "3e5aa30ebfbafd5951fb1b01e338e1800ce7e0e8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/3e5aa30ebfbafd5951fb1b01e338e1800ce7e0e8",
+                "reference": "3e5aa30ebfbafd5951fb1b01e338e1800ce7e0e8",
                 "shasum": ""
             },
             "require": {
@@ -444,7 +540,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.21-dev"
+                    "dev-master": "1.24-dev"
                 }
             },
             "autoload": {
@@ -479,7 +575,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2015-08-26 08:58:31"
+            "time": "2016-01-25 21:22:18"
         }
     ],
     "packages-dev": [],
