@@ -6,13 +6,13 @@ use Exception;
 use Lyber\Common\Components\Auth;
 use Lyber\Common\Components\Core;
 use Lyber\Common\Components\Database;
-use Lyber\Common\Controllers\ViewController;
+use Lyber\Common\Controllers\BundleController;
 use Lyber\Common\Entities\User;
 
-class UsersViewController extends ViewController
+class UsersBundleController extends BundleController
 {
 
-	public static function showAction($params){
+	public static function indexAction($params){
 
 		$users = Database::query('SELECT * FROM users');
 

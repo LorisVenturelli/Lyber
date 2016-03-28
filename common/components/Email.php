@@ -16,11 +16,13 @@ class Email
         self::$transport->setPassword(Config::get('smtp_mail', 'password'));
     }
 
-
     /**
      * Service method to fastly send a message
+     * @param $to
      * @param $subject
      * @param $body
+     * @return int
+     * @throws \Exception
      */
     public static function send($to, $subject, $body)
     {

@@ -2,11 +2,6 @@
 use Lyber\Common\Components\Config;
 use Lyber\Common\Components\Core;
 use Lyber\Common\Components\ErrorsHandler;
-use Lyber\Common\Engines\AdminEngine;
-use Lyber\Common\Engines\AjaxEngine;
-use Lyber\Common\Engines\APIEngine;
-use Lyber\Common\Engines\BackendEngine;
-use Lyber\Common\Engines\FrontendEngine;
 
 header('Content-Type: text/html; charset=utf-8');
 
@@ -17,73 +12,77 @@ Config::load(Core::getRoot()."common/AppConfig.ini");
 
 ErrorsHandler::init();
 
-// Routage Ajax
-Flight::route('/ajax(/@module(/@function(/@param)))', function($module, $function, $param) {
+$list_prefix = array();
+foreach (glob(__DIR__."/../apps/*/*Config.ini") as $filename) {
+    $tmp_config = parse_ini_file($filename, true);
+    if (isset($tmp_config['main']['prefix_link'])) {
+        $list_prefix[$tmp_config["main"]["name_app"]] = $tmp_config['main']['prefix_link'];
+    }
+}
 
-    if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
-        AjaxEngine::start($module, $function, $param);
-    else
-        echo "Cette requête n'est pas de l'ajax !";
+$empty = null;
 
-});
+foreach($list_prefix as $app => $prefix) {
 
-// Routage API
-Flight::route('/api(/@module(/@function(/@param)))', function($module, $function, $param) {
+    require_once(__DIR__."/../apps/".$app."/".ucfirst($app)."AppController.php");
 
-    APIEngine::start($module, $function, $param);
+    $mod_config = parse_ini_file(Core::getRoot().'apps/'.$app.'/'.ucfirst($app).'Config.ini', true);
 
-});
+    foreach($mod_config['routes'] as $direction => $links) {
 
-// Routage admin
-Flight::route('/admin(/@module(/@function(/@param)))', function($module, $function, $param) {
+        foreach($links as $key => $link) {
 
-    AdminEngine::start($module, $function, $param);
+            Flight::route((!empty($prefix) ? "/" : "") . $prefix . $link, function ($route) use ($app, $direction, $link) {
 
-});
+                $arguments = func_get_args();
 
-// Routes personnalisés
-$mod_config = parse_ini_file(Core::getRoot().'apps/frontend/FrontendConfig.ini', true);
+                $route_personnalise = explode('.', $direction);
 
-foreach($mod_config['routes'] as $direction => $links) {
+                $module = "";
+                $function = "";
 
-    foreach($links as $key => $link) {
+                if (!empty($route_personnalise[0])) {
+                    $module = $route_personnalise[0];
+                    $function = $route_personnalise[1];
+                }
 
-        Flight::route($link, function ($route) {
+                $appController = "\\Lyber\\Apps\\".ucfirst($app)."\\".ucfirst($app)."AppController";
 
-            $arguments = func_get_args();
+                $render = new $appController($app, $module, $function, end($arguments)->params);
+                echo $render->init()->render();
 
-            $link = $arguments[count($arguments)-1]->pattern;
+            }, true);
 
-            // Routes personnalis?s
-            $mod_config = parse_ini_file(Core::getRoot().'apps/frontend/FrontendConfig.ini', true);
-
-            $direction = Core::array_searchRecursive($link, $mod_config['routes']);
-
-            $route_personnalise = explode('.', $direction[0]);
-
-            $module = "";
-            $function = "";
-
-            if (!empty($route_personnalise[0])) {
-                $module = $route_personnalise[0];
-                $function = $route_personnalise[1];
-            }
-
-
-            FrontendEngine::start($module, $function, $arguments[count($arguments)-1]->params);
-
-        }, true);
+        }
 
     }
 
+    if(empty($prefix)){
+        $empty = $app;
+        continue;
+    }
+
+    Flight::route("/".$prefix . '(/@module(/@function(/@param)))', function($module, $function, $param) use ($app) {
+
+
+        $appController = "\\Lyber\\Apps\\".ucfirst($app)."\\".ucfirst($app)."AppController";
+
+        $render = new $appController($app, $module, $function, $param);
+        echo $render->init()->render();
+    });
+
 }
 
-// Routage frontend
-Flight::route('(/@module(/@function(/@param)))', function($module, $function, $param) {
+if(!empty($empty)){
+    Flight::route('(/@module(/@function(/@param)))', function($module, $function, $param) use ($empty) {
 
-    FrontendEngine::start($module, $function, $param);
+        $appController = "\\Lyber\\Apps\\".ucfirst($empty)."\\".ucfirst($empty)."AppController";
 
-});
+        $render = new $appController($empty, $module, $function, $param);
+        echo $render->init()->render();
+
+    });
+}
 
 Flight::set('flight.handle_errors', false);
 Flight::start();

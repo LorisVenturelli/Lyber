@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <base href="{{ app.host }}" />
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>AdminLTE 2 | Dashboard</title>
@@ -13,7 +14,7 @@
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
 
     {% for asset in assets.css %}
-    <link rel="stylesheet" href="{{ app.abs_url }}../{{ asset }}">
+    <link rel="stylesheet" href="{{ app.host }}{{ asset }}">
     {% endfor %}
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -141,7 +142,7 @@
     </div><!-- ./wrapper -->
 
     {% for asset in assets.js %}
-        <script type="text/javascript" src="{{ app.abs_url }}../{{ asset }}"></script>
+        <script type="text/javascript" src="{{ app.host }}{{ asset }}"></script>
     {% endfor %}
 
 </body>

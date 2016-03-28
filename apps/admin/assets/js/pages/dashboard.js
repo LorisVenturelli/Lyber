@@ -9,6 +9,15 @@ $(function () {
 
   "use strict";
 
+  $.ajax({
+    method: "POST",
+    url: "ajax/",
+    dataType: "json",
+    data: { name: "John", location: "Boston" }
+  }).done(function( response ) {
+    console.log(response);
+  });
+
   //Make the dashboard widgets sortable Using jquery UI
   $(".connectedSortable").sortable({
     placeholder: "sort-highlight",

@@ -5,13 +5,13 @@ namespace Lyber\Apps\Admin\Login;
 use Exception;
 use Lyber\Common\Components\Auth;
 use Lyber\Common\Components\Core;
-use Lyber\Common\Controllers\ViewController;
+use Lyber\Common\Controllers\BundleController;
 use Lyber\Common\Entities\User;
 
-class LoginViewController extends ViewController
+class LoginBundleController extends BundleController
 {
 
-	public static function showAction($param)
+	public static function indexAction($param)
 	{
 
 		$email = Core::getParam('email','','post');

@@ -194,9 +194,7 @@ class Core {
             $data = array($data);
         }
 
-        $reponse = ($code) ? "success" : "error";
-
-        return array('reponse'=>$reponse,'message'=>$message,'data'=>$data);
+        return array('response' => $code, 'message' => $message, 'datas' => $data);
 
     }
 

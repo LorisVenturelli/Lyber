@@ -2,10 +2,10 @@
 
 namespace Lyber\Common\Controllers;
 
-class ViewController
+class BundleController
 {
 
-    public static function showAction($param)
+    public static function indexAction($param)
     {
         return array();
     }

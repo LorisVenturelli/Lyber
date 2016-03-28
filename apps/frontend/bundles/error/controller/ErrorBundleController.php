@@ -1,14 +1,14 @@
 <?php
 
-namespace Lyber\Apps\Admin\Error;
+namespace Lyber\Apps\Frontend\Error;
 
 use Lyber\Common\Components\Core;
-use Lyber\Common\Controllers\ViewController;
+use Lyber\Common\Controllers\BundleController;
 
-class ErrorViewController extends ViewController
+class ErrorBundleController extends BundleController
 {
 
-    public static function showAction($params){
+    public static function indexAction($params){
 
         if(empty($params['code']))
             Core::redirect(Core::absURL());

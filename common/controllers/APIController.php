@@ -2,8 +2,7 @@
 
 namespace Lyber\Common\Controllers;
 
-class APIController
-{
+class APIController extends WebServicesController {
 
     public static function viewAction($param)
     {
