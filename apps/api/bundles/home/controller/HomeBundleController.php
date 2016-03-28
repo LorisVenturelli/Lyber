@@ -1,6 +1,6 @@
 <?php
 
-namespace Lyber\Apps\Api\Home;
+namespace Lyber\Apps\Api\Bundles\Home\Controller;
 
 use Lyber\Common\Controllers\BundleController;
 

@@ -84,7 +84,7 @@ class AppController {
         // Héritage des configs modules
         $this->config_view = array_replace_recursive($this->config_app, $this->config_view);
 
-        $moduleController = "Lyber\\Apps\\".$this->app."\\".ucfirst($this->module)."\\".$moduleController;
+        $moduleController = "Lyber\\Apps\\".$this->app."\\Bundles\\".ucfirst($this->module)."\\Controller\\".$moduleController;
 
         // Test existance class controller
         if(!class_exists($moduleController))

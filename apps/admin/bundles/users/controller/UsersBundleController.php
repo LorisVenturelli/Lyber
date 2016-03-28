@@ -1,6 +1,6 @@
 <?php
 
-namespace Lyber\Apps\Admin\Users;
+namespace Lyber\Apps\Admin\Bundles\Users\Controller;
 
 use Exception;
 use Lyber\Common\Components\Auth;

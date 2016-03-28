@@ -1,6 +1,6 @@
 <?php
 
-namespace Lyber\Apps\Admin\Error;
+namespace Lyber\Apps\Admin\Bundles\Error\Controller;
 
 use Lyber\Common\Components\Core;
 use Lyber\Common\Controllers\BundleController;

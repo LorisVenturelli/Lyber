@@ -1,6 +1,6 @@
 <?php
 
-namespace Lyber\Apps\Ajax\Home;
+namespace Lyber\Apps\Ajax\Bundles\Home\Controller;
 
 use Lyber\Common\Controllers\BundleController;
 
