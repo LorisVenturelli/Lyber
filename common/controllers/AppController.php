@@ -5,16 +5,10 @@ namespace Lyber\Common\Controllers;
 use Exception;
 use Lyber\Common\Components\Assets;
 use Lyber\Common\Components\Auth;
-use Lyber\Common\Components\Config;
 use Lyber\Common\Components\Core;
 
+use Lyber\Common\Components\View;
 use Lyber\Common\Entities\User;
-use Twig_Autoloader;
-use Twig_Environment;
-use Twig_Extensions_Extension_Text;
-use Twig_Loader_Array;
-use Twig_Loader_Chain;
-use Twig_Loader_Filesystem;
 
 class AppController {
 
@@ -145,6 +139,19 @@ class AppController {
         return array();
     }
 
+    /**
+     * Get all final datas for send to views
+     * @return array
+     */
+    protected function getDatas(){
+        return array_replace_recursive($this->getDatasToMerge(), $this->getCommonDatas());
+    }
+
+    /**
+     * Final render
+     * @return string
+     * @throws Exception
+     */
     public function render(){
 
         // Gestion minifer + cache assets
@@ -167,29 +174,21 @@ class AppController {
             $this->minified = true;
         }
 
-        Twig_Autoloader::register();
+        $datas = $this->getDatas();
 
-        // Paramétre fullpage du view module
-        if(!empty($this->config_view['param']['fullpage']) && $this->config_view['param']['fullpage'] == "1")
-        {
-            $loader = new Twig_Loader_Filesystem("apps/".$this->app."/bundles/".$this->module."/view");
-            $twig = new Twig_Environment($loader);
-            $twig->addExtension(new Twig_Extensions_Extension_Text());
-            $twig_file = $this->function.".twig";
-        }
-        else {
-            $loader1 = new Twig_Loader_Filesystem('apps/'.$this->app.'/view');
-            $loader2 = new Twig_Loader_Array(array(
-                'module_content' => file_get_contents("apps/".$this->app."/bundles/".$this->module."/view/".$this->function.".twig"),
-            ));
+        $view = new View(implode(DIRECTORY_SEPARATOR, array('apps', $this->app, 'bundles', $this->module, 'view', $this->function.'.twig')));
+        $bundle_content = $view->setDatas($datas)->render();
 
-            $loader = new Twig_Loader_Chain(array($loader1, $loader2));
-            $twig = new Twig_Environment($loader);
-            $twig->addExtension(new Twig_Extensions_Extension_Text());
-            $twig_file = "main.twig";
+        if(!empty($this->config_view['param']['fullpage']) && $this->config_view['param']['fullpage'] == "1") {
+            return $bundle_content;
         }
 
-        return $twig->render($twig_file, array_replace_recursive($this->getDatasToMerge(), $this->getCommonDatas()));
+        $datas["bundle_content"] = $bundle_content;
+
+        $view = new View(implode(DIRECTORY_SEPARATOR, array('apps', $this->app, 'view', 'main.twig')));
+        $html = $view->setDatas($datas)->render();
+
+        return $html;
 
     }
 
